@@ -1,0 +1,9 @@
+base:
+  build: .
+  ports:
+    - "3005:3005"
+  container_name: node-skeleton
+  environment:
+    PORT: 3005
+    NODE_PATH: app/src
+

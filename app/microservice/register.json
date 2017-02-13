@@ -1,0 +1,12 @@
+{
+	"name": "#(service.name)",
+	"tags": ["rw"],
+	"endpoints": [{
+		"path": "/node-skeleton/hi",
+		"method": "GET",
+		"redirect": {
+			"method": "GET",
+			"path": "/api/v1/node-skeleton/hi"
+		}
+	}]
+}

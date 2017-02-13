@@ -1,0 +1,10 @@
+{
+    "logger": {
+        "name": "rw-adapter-carto",
+        "level": "warn",
+        "toFile": false,
+        "dirLogFile": null
+    },
+    "service": {
+    }
+}
