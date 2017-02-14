@@ -1,10 +1,8 @@
 {
     "logger": {
-        "name": "rw-adapter-carto",
+        "name": "node-skeleton",
         "level": "debug",
         "toFile": false,
         "dirLogFile": null
-    },
-    "service": {
     }
 }

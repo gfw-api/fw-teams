@@ -1,6 +1,6 @@
 {
 	"name": "#(service.name)",
-	"tags": ["rw"],
+	"tags": ["gfw", "rw"],
 	"endpoints": [{
 		"path": "/node-skeleton/hi",
 		"method": "GET",

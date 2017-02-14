@@ -1,13 +1,12 @@
 {
      "logger": {
-        "name": "rw-adapter-carto-DEV",
+        "name": "node-skeleton-DEV",
         "level": "debug",
         "toFile": false,
         "dirLogFile": null
     },
     "service": {
-        "id": "rw-adapter-carto_1.0.0",
-        "name": "RW Adapter Carto API",
+        "name": "Node Skeleton",
         "port": 3005
     }
 }

@@ -1,8 +1,8 @@
 FROM mhart/alpine-node:7.2
 MAINTAINER raul.requero@vizzuality.com
 
-ENV NAME rw-adapter-carto
-ENV USER rw-adapter-carto
+ENV NAME node-skeleton
+ENV USER node-skeleton
 
 RUN apk update && apk upgrade && \
     apk add --no-cache --update bash git openssh python alpine-sdk

@@ -5,6 +5,7 @@ const config = require('config');
 const loader = require('loader');
 const convert = require('koa-convert');
 const ctRegisterMicroservice = require('ct-register-microservice-node');
+const ErrorSerializer = require('serializers/error.serializer');
 
 const koaBody = require('koa-body')({
     multipart: true,

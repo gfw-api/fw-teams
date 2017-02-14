@@ -1,8 +1,7 @@
-# Resource Watch Adapter CSV
+# Node Skeleton Microservice
 
 
-This repository is the microservice that implements the carto adapter
-funcionality, which is exposed on the /carto endpoint.
+This repository is the node skeleton microservice to create node microservice for WRI API
 
 1. [Getting Started](#getting-started)
 
@@ -20,8 +19,8 @@ installed on your machine.
 
 ```
 git clone https://github.com/Vizzuality/gfw-geostore-api.git
-cd rw-adapter-carto
-./adapter.sh develop
+cd node-skeleton
+./nodeSkeleton.sh develop
 ```text
 
 You can now access the microservice through the CT gateway.
