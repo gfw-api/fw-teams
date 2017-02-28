@@ -18,7 +18,7 @@ that you have [Docker Compose](https://docs.docker.com/compose/install/)
 installed on your machine.
 
 ```
-git clone https://github.com/Vizzuality/poc-microservice
+git clone https://github.com/Vizzuality/node-skeleton
 cd node-skeleton
 ./nodeSkeleton.sh develop
 ```text
