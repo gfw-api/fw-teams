@@ -18,7 +18,7 @@ that you have [Docker Compose](https://docs.docker.com/compose/install/)
 installed on your machine.
 
 ```
-git clone https://github.com/Vizzuality/gfw-geostore-api.git
+git clone https://github.com/Vizzuality/poc-microservice
 cd node-skeleton
 ./nodeSkeleton.sh develop
 ```text
@@ -33,3 +33,5 @@ It is necessary to define these environment variables:
 
 * CT_URL => Control Tower URL
 * NODE_ENV => Environment (prod, staging, dev)
+
+
