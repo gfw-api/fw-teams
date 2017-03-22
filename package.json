@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "NODE_PATH=app/src PORT=3005 node ./node_modules/.bin/grunt --gruntfile app/Gruntfile.js"
+    "dev": "NODE_PATH=app/src node ./node_modules/.bin/grunt --gruntfile app/Gruntfile.js",
+    "start": "NODE_PATH=app/src node app/index"
   },
   "keywords": [],
   "author": "",
