@@ -2,7 +2,7 @@
 	"name": "node-skeleton",
 	"tags": ["gfw", "rw"],
 	"endpoints": [{
-		"path": "/node-skeleton/hi",
+		"path": "/v1/node-skeleton/hi",
 		"method": "GET",
 		"redirect": {
 			"method": "GET",
