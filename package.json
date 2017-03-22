@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "CT_URL=http://mymachine:9000 LOCAL_URL=http://mymachine:3005 NODE_PATH=app/src PORT=3005 node --harmony ./node_modules/.bin/grunt --gruntfile app/Gruntfile.js"
+    "dev": "NODE_PATH=app/src PORT=3005 node ./node_modules/.bin/grunt --gruntfile app/Gruntfile.js"
   },
   "keywords": [],
   "author": "",
@@ -37,7 +37,7 @@
     "bluebird": "^3.4.7",
     "bunyan": "^1.8.5",
     "config": "^1.21.0",
-    "ct-register-microservice-node": "^2.0.1",    
+    "ct-register-microservice-node": "2.1.2",    
     "jsonapi-serializer": "2.1.1",
     "kcors": "^2.1.1",
     "koa": "^2.0.0",

@@ -8,6 +8,7 @@ develop:
     CT_URL: http://mymachine:9000 
     LOCAL_URL: http://mymachine:3005
     CT_TOKEN: null
+    API_VERSION: v1
   command: develop
   volumes:
     - ./app:/opt/node-skeleton/app
