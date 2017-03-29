@@ -1,0 +1,8 @@
+{
+    "logger": {
+        "name": "node-skeleton",
+        "level": "debug",
+        "toFile": false,
+        "dirLogFile": null
+    }
+}

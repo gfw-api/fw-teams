@@ -2,20 +2,19 @@ const Router = require('koa-router');
 
 
 const router = new Router({
-    prefix: '/node-skeleton',
+    prefix: '/service',
 });
 
-class HiRouter {
+class Service {
 
-    static hi(ctx) {
+    static sayHi(ctx) {
         ctx.body = {
-            hi: 'Ra'
+            greeting: 'hi'
         };
     }
 
 }
 
-router.get('/hi', HiRouter.hi);
-
+router.get('/hi', Service.sayHi);
 
 module.exports = router;

@@ -2,10 +2,9 @@ test:
   extends:
     file: base.yml
     service: base
-  ports:
-    - "3005"
   container_name: node-skeleton-test
   environment:
     NODE_ENV: test
     CT_URL: http://mymachine:9000
+    API_VERSION: v1
   command: test

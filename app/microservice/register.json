@@ -1,12 +1,11 @@
 {
 	"name": "node-skeleton",
-	"tags": ["gfw", "rw"],
 	"endpoints": [{
-		"path": "/v1/node-skeleton/hi",
+		"path": "/v1/service/hi",
 		"method": "GET",
 		"redirect": {
 			"method": "GET",
-			"path": "/api/v1/node-skeleton/hi"
+			"path": "/api/v1/service/hi"
 		}
 	}]
 }

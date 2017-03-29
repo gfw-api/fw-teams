@@ -20,7 +20,8 @@ installed on your machine.
 ```
 git clone https://github.com/Vizzuality/node-skeleton
 cd node-skeleton
-./nodeSkeleton.sh develop
+./service.sh develop
+./service.sh test
 ```text
 
 You can now access the microservice through the CT gateway.
@@ -33,5 +34,3 @@ It is necessary to define these environment variables:
 
 * CT_URL => Control Tower URL
 * NODE_ENV => Environment (prod, staging, dev)
-
-
