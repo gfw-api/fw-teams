@@ -1,12 +1,17 @@
 {
      "logger": {
-        "name": "node-skeleton-DEV",
+        "name": "fw-teams-DEV",
         "level": "debug",
         "toFile": false,
         "dirLogFile": null
     },
     "service": {
-        "name": "Node Skeleton",
+        "name": "fw-teams-1.0.0",
         "port": 3005
+    },
+    "mongodb": {
+        "database": "fw_teams",
+        "host": "192.168.1.109",
+        "port": 32780
     }
 }

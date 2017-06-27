@@ -18,10 +18,10 @@ that you have [Docker Compose](https://docs.docker.com/compose/install/)
 installed on your machine.
 
 ```
-git clone https://github.com/Vizzuality/node-skeleton
-cd node-skeleton
-./service.sh develop
-./service.sh test
+git clone https://github.com/gfw-api/fw-teams
+cd fw-teams
+./team.sh develop
+./team.sh test
 ```text
 
 You can now access the microservice through the CT gateway.
@@ -34,3 +34,35 @@ It is necessary to define these environment variables:
 
 * CT_URL => Control Tower URL
 * NODE_ENV => Environment (prod, staging, dev)
+
+## Quick Overview
+
+### Teams Entity
+
+```
+
+name: <String>, required
+managers: <String>, // array
+users: <String>, // array
+areas: <String> // array
+
+```
+
+### CRUD Team
+
+```
+
+GET: /teams -> Return all teams of the user logged
+GET: /teams/:id -> Return team with the same id. Check if the team is owned of the logged user
+POST: /teams -> Create an team and associate to the user. With body:
+
+    #form data
+    name: "my-team"
+    managers: [user-id]
+    users: [userId, userId2, userId3, ...]
+    areas: [areaId, areaId2, areaId3, ...]
+
+PATCH: /teams/:id -> Update the area with the same id. Check if the area is owned of the logged user
+DELETE: /teams/:id -> Delete the area with the same id. Check if the area is owned of the logged user
+
+```

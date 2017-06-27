@@ -1,6 +1,6 @@
 {
     "logger": {
-        "name": "node-skeleton",
+        "name": "fw-teams",
         "level": "debug",
         "toFile": false,
         "dirLogFile": null

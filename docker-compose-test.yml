@@ -2,7 +2,7 @@ test:
   extends:
     file: base.yml
     service: base
-  container_name: node-skeleton-test
+  container_name: fw-teams-test
   environment:
     NODE_ENV: test
     CT_URL: http://mymachine:9000

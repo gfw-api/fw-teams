@@ -11,4 +11,10 @@ develop:
     API_VERSION: v1
   command: develop
   volumes:
-    - ./app:/opt/node-skeleton/app
+    - ./app:/opt/fw-teams/app
+  links: 
+    - mongo
+mongo:
+  extends:
+    file: base.yml
+    service: mongo

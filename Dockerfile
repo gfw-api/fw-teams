@@ -1,8 +1,8 @@
 FROM node:7.7-alpine
 MAINTAINER raul.requero@vizzuality.com
 
-ENV NAME node-skeleton
-ENV USER node-skeleton
+ENV NAME fw-teams
+ENV USER fw-teams
 
 RUN apk update && apk upgrade && \
     apk add --no-cache --update bash git openssh python alpine-sdk

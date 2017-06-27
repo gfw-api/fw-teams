@@ -2,8 +2,17 @@ base:
   build: .
   ports:
     - "3005:3005"
-  container_name: node-skeleton
+  container_name: fw-teams
   environment:
     PORT: 3005
     NODE_PATH: app/src
 
+mongo:
+  image: mongo
+  container_name: fw-teams-mongo
+  command: --smallfiles
+  ports:
+    - "27017"
+  volumes:
+    - $HOME/docker/data/fw-teams-api:/data/db
+  restart: always
