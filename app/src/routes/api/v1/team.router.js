@@ -19,6 +19,16 @@ class TeamRouter {
       ctx.body = TeamSerializer.serialize(teams);
   }
 
+  static async save(ctx) {
+      logger.info('Saving team');
+      const area = await new TeamModel({
+          name: ctx.request.body.name,
+          managers: ctx.request.body.managers,
+          users: ctx.request.body.users,
+          areas: ctx.request.body.areas
+      }).save();
+      ctx.body = TeamSerializer.serialize(area);
+  }
 }
 
 async function loggedTeamToState(ctx, next) {
@@ -42,6 +52,7 @@ async function loggedTeamToState(ctx, next) {
 
 // router.get('/', loggedTeamToState, TeamRouter.getAll);
 router.get('/', TeamRouter.getAll);
+router.post('/', TeamRouter.save);
 
 
 module.exports = router;
