@@ -1,7 +1,7 @@
 const Router = require('koa-router');
 const logger = require('logger');
 const ctRegisterMicroservice = require('ct-register-microservice-node');
-const AreaModel = require('models/team.model');
+const TeamModel = require('models/team.model');
 const Promise = require('bluebird');
 const ErrorSerializer = require('serializers/error.serializer');
 const TeamSerializer = require('serializers/team.serializer');
@@ -12,10 +12,13 @@ const router = new Router({
 
 class TeamRouter {
   static async getAll(ctx){
-      logger.info('Obtaining all areas of the user ', ctx.state.loggedUser.id);
-      const teams = await TeamModel.find({ userId: ctx.state.loggedUser.id });
+      // logger.info('Obtaining all areas of the user ', ctx.state.loggedUser.id);
+      // const teams = await TeamModel.find({ userId: ctx.state.loggedUser.id });
+      logger.info('Obtaining all areas of the user ');
+      const teams = await TeamModel.find({});
       ctx.body = TeamSerializer.serialize(teams);
   }
+
 }
 
 async function loggedTeamToState(ctx, next) {
@@ -35,6 +38,10 @@ async function loggedTeamToState(ctx, next) {
     await next();
 }
 
-router.get('/', loggedTeamToState, TeamRouter.getAll);
+
+
+// router.get('/', loggedTeamToState, TeamRouter.getAll);
+router.get('/', TeamRouter.getAll);
+
 
 module.exports = router;
