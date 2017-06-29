@@ -14,18 +14,20 @@ class TeamRouter {
   static async getAll(ctx){
       // logger.info('Obtaining all areas of the user ', ctx.state.loggedUser.id);
       // const teams = await TeamModel.find({ userId: ctx.state.loggedUser.id });
-      logger.info('Obtaining all areas of the user ');
+      logger.info('Obtaining all teams of the user ');
       const teams = await TeamModel.find({});
       ctx.body = TeamSerializer.serialize(teams);
   }
 
   static async save(ctx) {
-      logger.info('Saving team');
+      logger.info('Saving team', ctx.request.body);
+      logger.info('managers', JSON.parse(ctx.request.body).managers);
+      const parsedBody = JSON.parse(ctx.request.body);
       const area = await new TeamModel({
-          name: ctx.request.body.name,
-          managers: ctx.request.body.managers,
-          users: ctx.request.body.users,
-          areas: ctx.request.body.areas,
+          name: parsedBody.name,
+          managers: parsedBody.managers,
+          users: parsedBody.users,
+          areas: parsedBody.areas,
           createdAt: Date.now()      
       }).save();
       ctx.body = TeamSerializer.serialize(area);
@@ -34,18 +36,21 @@ class TeamRouter {
 
     static async update(ctx) {
         logger.info(`Updating team with id ${ctx.params.id}`);
+        const parsedBody = JSON.parse(ctx.request.body);
         const team = await TeamModel.findById(ctx.params.id);
-        if (ctx.request.body.name) {
-          team.name = ctx.request.body.name;
+        if (parsedBody.name) {
+          team.name = parsedBody.name;
         }
-        if (ctx.request.body.managers) {
-          team.managers = ctx.request.body.managers;
+        if (parsedBody.managers) {
+          team.managers = parsedBody.managers;
         }
-        if (ctx.request.body.users) {
-          team.users = ctx.request.body.users;
+        if (parsedBody.users) {
+        logger.info(`Users ${parsedBody.users}`);
+          team.users = parsedBody.users;
         }
-        if (ctx.request.body.users) {
-          team.users = ctx.request.body.users;
+        if (parsedBody.areas) {
+        logger.info(`Area ${parsedBody.areas}`);
+          team.areas = parsedBody.areas;
         }
 
         await team.save();
@@ -99,6 +104,6 @@ async function loggedUserToState(ctx, next) {
 router.get('/', TeamRouter.getAll);
 router.post('/', TeamRouter.save);
 router.patch('/:id', TeamRouter.update);
-router.delete('/:id', checkPermission, TeamRouter.delete);
+router.delete('/:id', TeamRouter.delete);
 
 module.exports = router;
