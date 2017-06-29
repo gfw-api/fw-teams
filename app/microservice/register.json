@@ -1,12 +1,39 @@
 {
 	"name": "#(service.name)",
     "tags": ["fw"],
-	"endpoints": [{
-		"path": "/v1/teams",
-		"method": "GET",
-		"redirect": {
+	"endpoints": [
+		{
+			"path": "/v1/teams",
+			"authenticated": true,
 			"method": "GET",
-			"path": "/api/v1/teams"
+			"redirect": {
+				"method": "GET",
+				"path": "/api/v1/teams"
+			}
+		},{
+			"path": "/v1/teams",
+			"method": "POST",
+			"authenticated": true,
+			"redirect": {
+				"method": "POST",
+				"path": "/api/v1/teams"
+			}
+		},{
+			"path": "/v1/teams/:id",
+			"method": "PATCH",
+			"authenticated": true,
+			"redirect": {
+				"method": "PATCH",
+				"path": "/api/v1/teams/:id"
+			}
+		},{
+			"path": "/v1/teams/:id",
+			"method": "DELETE",
+			"authenticated": true,
+			"redirect": {
+				"method": "DELETE",
+				"path": "/api/v1/teams/:id"
+			}
 		}
-	}]
+	]
 }
