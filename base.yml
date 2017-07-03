@@ -1,10 +1,10 @@
 base:
   build: .
   ports:
-    - "3005:3005"
+    - "3035:3035"
   container_name: fw-teams
   environment:
-    PORT: 3005
+    PORT: 3035
     NODE_PATH: app/src
 
 mongo:

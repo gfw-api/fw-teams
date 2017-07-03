@@ -1,5 +1,5 @@
 {
-	"name": "#(service.name)",
+	"name": "fw-teams",
     "tags": ["fw"],
 	"endpoints": [
 		{

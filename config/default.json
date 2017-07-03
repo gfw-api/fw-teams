@@ -7,11 +7,9 @@
     },
     "service": {
         "name": "fw-teams-1.0.0",
-        "port": 3005
+        "port": 3035
     },
     "mongodb": {
-        "database": "fw_teams",
-        "host": "192.168.99.100",
-        "port": 27017
+        "database": "fw_teams"
     }
 }
