@@ -11,26 +11,32 @@ const router = new Router({
 });
 
 class TeamRouter {
-  static async getAll(ctx){
-      // logger.info('Obtaining all areas of the user ', ctx.state.loggedUser.id);
-      // const teams = await TeamModel.find({ userId: ctx.state.loggedUser.id });
-      logger.info('Obtaining all teams of the user ');
-      const teams = await TeamModel.find({});
-      ctx.body = TeamSerializer.serialize(teams);
+  static async getById(ctx){
+      logger.info(`Getting team with id ${ctx.params.id}`);
+      const team = await TeamModel.findById(ctx.params.id);
+      ctx.body = TeamSerializer.serialize(team);
+  }
+
+  static async getByUserId(ctx){
+      logger.info(`Getting team for user with id ${ctx.params.userId}`);
+      const team = await TeamModel.findOne({ users: ctx.params.userId });
+      ctx.body = TeamSerializer.serialize(team);
   }
 
   static async save(ctx) {
       logger.info('Saving team', ctx.request.body);
       logger.info('managers', JSON.parse(ctx.request.body).managers);
+
       const parsedBody = JSON.parse(ctx.request.body);
-      const area = await new TeamModel({
+      const team = await new TeamModel({
           name: parsedBody.name,
           managers: parsedBody.managers,
           users: parsedBody.users,
           areas: parsedBody.areas,
-          createdAt: Date.now()      
+          layers: parsedBody.layers,
+          createdAt: Date.now() 
       }).save();
-      ctx.body = TeamSerializer.serialize(area);
+      ctx.body = TeamSerializer.serialize(team);
   }
 
 
@@ -52,6 +58,10 @@ class TeamRouter {
         logger.info(`Area ${parsedBody.areas}`);
           team.areas = parsedBody.areas;
         }
+        if (parsedBody.layers) {
+        logger.info(`Layer ${parsedBody.layers}`);
+          team.layers = parsedBody.layers;
+        }
 
         await team.save();
         ctx.body = TeamSerializer.serialize(team);
@@ -69,39 +79,8 @@ class TeamRouter {
     }
 }
 
-async function checkPermission(ctx, next) {
-    ctx.assert(ctx.params.id, 400, 'Id required');
-    let team = await TeamModel.findById(ctx.params.id);
-    if (!team) {
-        ctx.throw(404, 'Team not found');
-        return;
-    }
-    if (!team.managers.includes(ctx.state.loggedUser.id)) {
-        ctx.throw(403, 'Not authorized');
-        return;
-    }
-    await next();
-}
-
-async function loggedUserToState(ctx, next) {
-    logger.info('ctx.query', ctx);
-    if (ctx.query && ctx.query.loggedUser){
-        ctx.state.loggedUser = JSON.parse(ctx.query.loggedUser);
-        delete ctx.query.loggedUser;
-    } else if (ctx.request.body && ctx.request.body.loggedUser) {
-        ctx.state.loggedUser = ctx.request.body.loggedUser;
-        delete ctx.request.body.loggedUser;
-    } else if (ctx.request.body.fields && ctx.request.body.loggedUser) {
-        ctx.state.loggedUser = JSON.parse(ctx.request.body.loggedUser);
-        delete ctx.request.body.loggedUser;
-    } else {
-        ctx.throw(401, 'Not logged');
-        return;
-    }
-    await next();
-}
-
-router.get('/', TeamRouter.getAll);
+router.get('/:id', TeamRouter.getById);
+router.get('/user/:userId', TeamRouter.getByUserId);
 router.post('/', TeamRouter.save);
 router.patch('/:id', TeamRouter.update);
 router.delete('/:id', TeamRouter.delete);

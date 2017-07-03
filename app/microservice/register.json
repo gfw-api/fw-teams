@@ -3,12 +3,20 @@
     "tags": ["fw"],
 	"endpoints": [
 		{
-			"path": "/v1/teams",
+			"path": "/v1/teams/:id",
 			"authenticated": true,
 			"method": "GET",
 			"redirect": {
 				"method": "GET",
-				"path": "/api/v1/teams"
+				"path": "/api/v1/teams/:id"
+			}
+		},{
+			"path": "/v1/teams/user/:userId",
+			"method": "GET",
+			"authenticated": true,
+			"redirect": {
+				"method": "GET",
+				"path": "/api/v1/teams/user/:userId"
 			}
 		},{
 			"path": "/v1/teams",

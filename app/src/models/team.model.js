@@ -7,6 +7,7 @@ const Team = new Schema({
     managers: [{ type: String, trim: true }],
     users: [{ type: String, trim: true }],
     areas: [{ type: String, trim: true }],
+    layers: [{ type: String, trim: true }],
     createdAt: { type: Date, required: true, default: Date.now }
 });
 
