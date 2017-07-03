@@ -25,15 +25,16 @@ class TeamRouter {
 
   static async save(ctx) {
       logger.info('Saving team', ctx.request.body);
-      logger.info('managers', JSON.parse(ctx.request.body).managers);
-
-      const parsedBody = JSON.parse(ctx.request.body);
+      const body = ctx.request.body;
+      const userId = ctx.request.body.loggedUser.id;
+      body.users.push(userId)
+      body.managers.push(userId)
       const team = await new TeamModel({
-          name: parsedBody.name,
-          managers: parsedBody.managers,
-          users: parsedBody.users,
-          areas: parsedBody.areas,
-          layers: parsedBody.layers,
+          name: body.name,
+          managers: body.managers,
+          users: body.users,
+          areas: body.areas,
+          layers: body.layers,
           createdAt: Date.now() 
       }).save();
       ctx.body = TeamSerializer.serialize(team);
