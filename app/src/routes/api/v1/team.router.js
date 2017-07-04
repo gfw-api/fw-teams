@@ -5,6 +5,7 @@ const TeamModel = require('models/team.model');
 const Promise = require('bluebird');
 const ErrorSerializer = require('serializers/error.serializer');
 const TeamSerializer = require('serializers/team.serializer');
+const TeamValidator = require('validators/team.validator');
 
 const router = new Router({
     prefix: '/teams',
@@ -23,7 +24,7 @@ class TeamRouter {
       ctx.body = TeamSerializer.serialize(team);
   }
 
-  static async save(ctx) {
+  static async create(ctx) {
       logger.info('Saving team', ctx.request.body);
       const body = ctx.request.body;
       const userId = ctx.request.body.loggedUser.id;
@@ -82,8 +83,8 @@ class TeamRouter {
 
 router.get('/:id', TeamRouter.getById);
 router.get('/user/:userId', TeamRouter.getByUserId);
-router.post('/', TeamRouter.save);
-router.patch('/:id', TeamRouter.update);
+router.post('/', TeamValidator.create, TeamRouter.create);
+router.patch('/:id', TeamValidator.update, TeamRouter.update);
 router.delete('/:id', TeamRouter.delete);
 
 module.exports = router;

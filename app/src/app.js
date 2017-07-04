@@ -8,6 +8,7 @@ mongoose.Promise = require('bluebird');
 const ctRegisterMicroservice = require('ct-register-microservice-node');
 const ErrorSerializer = require('serializers/error.serializer');
 const mongoUri = process.env.MONGO_URI || `mongodb://${config.get('mongodb.host')}:${config.get('mongodb.port')}/${config.get('mongodb.database')}`;
+const validate = require('koa-validate');
 
 const koaBody = require('koa-body')({
     multipart: true,
@@ -28,6 +29,7 @@ mongoose.connect(mongoUri, onDbReady);
 const app = new Koa();
 
 app.use(koaBody);
+validate(app);
 
 app.use(async (ctx, next) => {
     try {
