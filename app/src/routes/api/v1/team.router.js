@@ -28,8 +28,8 @@ class TeamRouter {
       logger.info('Saving team', ctx.request.body);
       const body = ctx.request.body;
       const userId = ctx.request.body.loggedUser.id;
-      body.users.push(userId)
-      body.managers.push(userId)
+      if (typeof body.users !== 'undefined') body.users.push(userId);
+      if (typeof body.managers !== 'undefined') body.managers.push(userId);
       const team = await new TeamModel({
           name: body.name,
           managers: body.managers,

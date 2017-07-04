@@ -17,7 +17,17 @@ class TeamValidator {
         ctx.checkBody('users').optional();
         ctx.checkBody('areas').optional();
         ctx.checkBody('layers').optional();
-
+        const isArrayToErrors = (field) => {
+          const value = ctx.request.body[field];
+          if (value !== undefined && !Array.isArray(value)) {
+            ctx.errors = [ ...ctx.errors , { [field]: `${field} should be an Array.` }];
+          }
+        }
+        isArrayToErrors('managers');
+        isArrayToErrors('users');
+        isArrayToErrors('areas');
+        isArrayToErrors('layers');
+        
         if (ctx.errors) {
             ctx.body = ErrorSerializer.serializeValidationBodyErrors(ctx.errors);
             ctx.status = 400;
