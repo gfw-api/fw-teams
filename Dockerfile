@@ -1,4 +1,4 @@
-FROM node:7.7-alpine
+FROM node:8.1-alpine
 MAINTAINER raul.requero@vizzuality.com
 
 ENV NAME fw-teams

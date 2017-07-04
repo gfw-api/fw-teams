@@ -10,9 +10,6 @@ var teamSerializer = new JSONAPISerializer('team', {
     resource: {
         attributes: ['type', 'content']
     },
-    typeForAttribute: function (attribute) {
-        return attribute;
-    },
     keyForAttribute: 'camelCase'
 });
 

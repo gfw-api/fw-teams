@@ -1,9 +1,6 @@
 const Router = require('koa-router');
 const logger = require('logger');
-const ctRegisterMicroservice = require('ct-register-microservice-node');
 const TeamModel = require('models/team.model');
-const Promise = require('bluebird');
-const ErrorSerializer = require('serializers/error.serializer');
 const TeamSerializer = require('serializers/team.serializer');
 const TeamValidator = require('validators/team.validator');
 
@@ -12,13 +9,13 @@ const router = new Router({
 });
 
 class TeamRouter {
-  static async getById(ctx){
+  static async getById(ctx) {
       logger.info(`Getting team with id ${ctx.params.id}`);
       const team = await TeamModel.findById(ctx.params.id);
       ctx.body = TeamSerializer.serialize(team);
   }
 
-  static async getByUserId(ctx){
+  static async getByUserId(ctx) {
       logger.info(`Getting team for user with id ${ctx.params.userId}`);
       const team = await TeamModel.findOne({ users: ctx.params.userId });
       ctx.body = TeamSerializer.serialize(team);

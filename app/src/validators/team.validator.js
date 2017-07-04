@@ -3,7 +3,7 @@ const ErrorSerializer = require('serializers/error.serializer');
 
 class TeamValidator {
     static async create(ctx, next) {
-        logger.debug('Validating body for create team');
+        logger.info('Validating body for create team');
         ctx.checkBody('name').notEmpty().len(1, 100);
         ctx.checkBody('managers').optional();
         ctx.checkBody('users').optional();
@@ -11,7 +11,7 @@ class TeamValidator {
         ctx.checkBody('layers').optional();
         const isArrayToErrors = (field) => {
           const value = ctx.request.body[field];
-          if (value !== undefined && !Array.isArray(value)) {
+          if (typeof value !== 'undefined' && !Array.isArray(value)) {
             ctx.errors = [ ...ctx.errors , { [field]: `${field} should be an Array.` }];
           }
         }
@@ -29,7 +29,7 @@ class TeamValidator {
     }
 
     static async update(ctx, next) {
-        logger.debug('Validating body for update team');
+        logger.info('Validating body for update team');
         ctx.checkBody('name').optional().notEmpty().len(1, 100);
         ctx.checkBody('managers').optional();
         ctx.checkBody('users').optional();
