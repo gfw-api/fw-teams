@@ -3,14 +3,6 @@ const ErrorSerializer = require('serializers/error.serializer');
 
 class TeamValidator {
     static async create(ctx, next) {
-        function isArray(value){
-          if (Object.prototype.toString.call( value ) !== '[object Array]') {
-            ctx.detail = 'notArray';
-            ctx.status = 400;
-            return;
-          }
-        }
-
         logger.debug('Validating body for create team');
         ctx.checkBody('name').notEmpty().len(1, 100);
         ctx.checkBody('managers').optional();
