@@ -30,7 +30,7 @@ class TeamValidator {
 
     static async update(ctx, next) {
         logger.debug('Validating body for update team');
-        ctx.checkBody('name').notEmpty().len(1, 100);
+        ctx.checkBody('name').optional().notEmpty().len(1, 100);
         ctx.checkBody('managers').optional();
         ctx.checkBody('users').optional();
         ctx.checkBody('areas').optional();
