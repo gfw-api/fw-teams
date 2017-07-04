@@ -44,7 +44,7 @@ class TeamRouter {
 
     static async update(ctx) {
         logger.info(`Updating team with id ${ctx.params.id}`);
-        const parsedBody = JSON.parse(ctx.request.body);
+        const parsedBody = ctx.request.body;
         const team = await TeamModel.findById(ctx.params.id);
         if (parsedBody.name) {
           team.name = parsedBody.name;
