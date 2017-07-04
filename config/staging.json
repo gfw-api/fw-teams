@@ -4,5 +4,8 @@
         "level": "debug",
         "toFile": false,
         "dirLogFile": null
+    },
+    "mongodb": {
+        "database": "fw_teams_staging"
     }
 }
