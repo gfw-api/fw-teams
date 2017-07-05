@@ -10,6 +10,6 @@
         "port": 3035
     },
     "mongodb": {
-        "database": "fw_teams"
+        "database": "fw_teams_db"
     }
 }

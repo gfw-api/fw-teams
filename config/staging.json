@@ -6,6 +6,6 @@
         "dirLogFile": null
     },
     "mongodb": {
-        "database": "fw_teams_staging"
+        "database": "fw_teams_db_staging"
     }
 }
