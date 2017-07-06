@@ -5,7 +5,7 @@ var JSONAPISerializer = require('jsonapi-serializer').Serializer;
 
 var teamSerializer = new JSONAPISerializer('team', {
     attributes: [
-        'name', 'managers', 'users', 'areas', 'layers', 'createdAt'
+        'name', 'managers', 'users', 'areas', 'layers', 'confirmedUsers', 'createdAt'
     ],
     resource: {
         attributes: ['type', 'content']
