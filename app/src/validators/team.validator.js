@@ -32,6 +32,7 @@ class TeamValidator {
         logger.info('Validating body for update team');
         ctx.checkBody('name').optional().notEmpty().len(1, 100);
         ctx.checkBody('managers').optional();
+        ctx.checkBody('confirmedUsers').optional();
         ctx.checkBody('users').optional();
         ctx.checkBody('areas').optional();
         ctx.checkBody('layers').optional();

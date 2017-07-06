@@ -58,6 +58,10 @@ class TeamRouter {
         logger.info(`Users ${parsedBody.users}`);
           team.users = parsedBody.users;
         }
+        if (parsedBody.confirmedUsers) {
+        logger.info(`Users ${parsedBody.confirmedUsers}`);
+          team.confirmedUsers = parsedBody.confirmedUsers;
+        }
         if (parsedBody.areas) {
         logger.info(`Area ${parsedBody.areas}`);
           team.areas = parsedBody.areas;
