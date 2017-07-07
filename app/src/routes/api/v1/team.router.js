@@ -34,7 +34,7 @@ class TeamRouter {
       const body = ctx.request.body;
       const userId = ctx.request.body.loggedUser.id;
 
-      if (body.managers === undefined) body.managers = [];
+      if (typeof body.managers === 'undefined') body.managers = [];
       if (!includes(body.managers, userId)) body.managers.push(userId);
       remove(body.users, userId);
 
