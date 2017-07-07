@@ -29,9 +29,12 @@ class TeamRouter {
 
   static async create(ctx) {
       logger.info('Saving team', ctx.request.body);
+      const includes = (container, value) => container.indexOf(value) >= 0;
       const body = ctx.request.body;
       const userId = ctx.request.body.loggedUser.id;
-      if (typeof body.managers !== 'undefined') body.managers.push(userId);
+
+      if (body.managers === undefined) body.managers = [];
+      if (!includes(body.managers, userId)) body.managers.push(userId);
       const team = await new TeamModel({
           name: body.name,
           managers: body.managers,
@@ -46,29 +49,33 @@ class TeamRouter {
 
     static async update(ctx) {
         logger.info(`Updating team with id ${ctx.params.id}`);
-        const parsedBody = ctx.request.body;
+        const includes = (container, value) => container.indexOf(value) >= 0;
+        const body = ctx.request.body;
+        const userId = body.loggedUser.id;
         const team = await TeamModel.findById(ctx.params.id);
-        if (parsedBody.name) {
-          team.name = parsedBody.name;
+        
+        if (!includes(body.managers, userId)) body.managers.push(userId);
+        if (body.name) {
+          team.name = body.name;
         }
-        if (parsedBody.managers) {
-          team.managers = parsedBody.managers;
+        if (body.managers) {
+          team.managers = body.managers;
         }
-        if (parsedBody.users) {
-        logger.info(`Users ${parsedBody.users}`);
-          team.users = parsedBody.users;
+        if (body.users) {
+        logger.info(`Users ${body.users}`);
+          team.users = body.users;
         }
-        if (parsedBody.confirmedUsers) {
-        logger.info(`Users ${parsedBody.confirmedUsers}`);
-          team.confirmedUsers = parsedBody.confirmedUsers;
+        if (body.confirmedUsers) {
+        logger.info(`Users ${body.confirmedUsers}`);
+          team.confirmedUsers = body.confirmedUsers;
         }
-        if (parsedBody.areas) {
-        logger.info(`Area ${parsedBody.areas}`);
-          team.areas = parsedBody.areas;
+        if (body.areas) {
+        logger.info(`Area ${body.areas}`);
+          team.areas = body.areas;
         }
-        if (parsedBody.layers) {
-        logger.info(`Layer ${parsedBody.layers}`);
-          team.layers = parsedBody.layers;
+        if (body.layers) {
+        logger.info(`Layer ${body.layers}`);
+          team.layers = body.layers;
         }
 
         await team.save();
