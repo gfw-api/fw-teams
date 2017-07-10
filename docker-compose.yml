@@ -1,7 +1,7 @@
 prod:
   image: vizzuality/fw-teams:1.0.0${STAGING}
   ports:
-    - "3035:3035"
+    - "3035"
   env_file:
     - prod.env
   command: start
