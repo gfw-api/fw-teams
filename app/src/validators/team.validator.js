@@ -12,7 +12,8 @@ class TeamValidator {
         const isArrayToErrors = (field) => {
           const value = ctx.request.body[field];
           if (typeof value !== 'undefined' && !Array.isArray(value)) {
-            ctx.errors = [ ...ctx.errors , { [field]: `${field} should be an Array.` }];
+            const newError = { [field]: `${field} should be an Array.` };
+            ctx.errors = ctx.errors ? [ ...ctx.errors , newError ]: [ newError ];
           }
         }
         isArrayToErrors('managers');
