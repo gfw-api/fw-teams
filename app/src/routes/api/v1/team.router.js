@@ -17,16 +17,27 @@ class TeamRouter {
 
   static async getByUserId(ctx) {
       logger.info(`Getting team for user with id ${ctx.params.userId}`);
-      const team = await TeamModel.findOne({ users: ctx.params.userId });
+      let team = await TeamModel.findOne({ managers: ctx.params.userId });
+      if (!team){
+        team = await TeamModel.findOne({ confirmedUsers: ctx.params.userId });
+      }
+      if (!team){                                                     // REMOVE THIS
+        team = await TeamModel.findOne({ users: ctx.params.userId }); // REMOVE THIS
+      }                                                               // REMOVE THIS
       ctx.body = TeamSerializer.serialize(team);
   }
 
   static async create(ctx) {
       logger.info('Saving team', ctx.request.body);
+      const includes = (container, value) => container.indexOf(value) >= 0;
+      const remove = (array, value) => { if (array.indexOf(value) > -1) { array.splice(array.indexOf(value), 1);}};
       const body = ctx.request.body;
       const userId = ctx.request.body.loggedUser.id;
-      if (typeof body.users !== 'undefined') body.users.push(userId);
-      if (typeof body.managers !== 'undefined') body.managers.push(userId);
+
+      if (typeof body.managers === 'undefined') body.managers = [];
+      if (!includes(body.managers, userId)) body.managers.push(userId);
+      remove(body.users, userId);
+
       const team = await new TeamModel({
           name: body.name,
           managers: body.managers,
@@ -41,25 +52,35 @@ class TeamRouter {
 
     static async update(ctx) {
         logger.info(`Updating team with id ${ctx.params.id}`);
-        const parsedBody = ctx.request.body;
+        const includes = (container, value) => container.indexOf(value) >= 0;
+        const remove = (array, value) => { if (array.indexOf(value) > -1) { array.splice(array.indexOf(value), 1);}};
+        const body = ctx.request.body;
+        const userId = body.loggedUser.id;
         const team = await TeamModel.findById(ctx.params.id);
-        if (parsedBody.name) {
-          team.name = parsedBody.name;
+        
+        if (!includes(body.managers, userId)) body.managers.push(userId);
+        remove(body.users, userId);
+        if (body.name) {
+          team.name = body.name;
         }
-        if (parsedBody.managers) {
-          team.managers = parsedBody.managers;
+        if (body.managers) {
+          team.managers = body.managers;
         }
-        if (parsedBody.users) {
-        logger.info(`Users ${parsedBody.users}`);
-          team.users = parsedBody.users;
+        if (body.users) {
+        logger.info(`Users ${body.users}`);
+          team.users = body.users;
         }
-        if (parsedBody.areas) {
-        logger.info(`Area ${parsedBody.areas}`);
-          team.areas = parsedBody.areas;
+        if (body.confirmedUsers) {
+        logger.info(`Users ${body.confirmedUsers}`);
+          team.confirmedUsers = body.confirmedUsers;
         }
-        if (parsedBody.layers) {
-        logger.info(`Layer ${parsedBody.layers}`);
-          team.layers = parsedBody.layers;
+        if (body.areas) {
+        logger.info(`Area ${body.areas}`);
+          team.areas = body.areas;
+        }
+        if (body.layers) {
+        logger.info(`Layer ${body.layers}`);
+          team.layers = body.layers;
         }
 
         await team.save();

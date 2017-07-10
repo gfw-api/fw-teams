@@ -12,7 +12,8 @@ class TeamValidator {
         const isArrayToErrors = (field) => {
           const value = ctx.request.body[field];
           if (typeof value !== 'undefined' && !Array.isArray(value)) {
-            ctx.errors = [ ...ctx.errors , { [field]: `${field} should be an Array.` }];
+            const newError = { [field]: `${field} should be an Array.` };
+            ctx.errors = ctx.errors ? [ ...ctx.errors , newError ]: [ newError ];
           }
         }
         isArrayToErrors('managers');
@@ -32,6 +33,7 @@ class TeamValidator {
         logger.info('Validating body for update team');
         ctx.checkBody('name').optional().notEmpty().len(1, 100);
         ctx.checkBody('managers').optional();
+        ctx.checkBody('confirmedUsers').optional();
         ctx.checkBody('users').optional();
         ctx.checkBody('areas').optional();
         ctx.checkBody('layers').optional();

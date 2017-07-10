@@ -8,6 +8,7 @@ const Team = new Schema({
     users: { type: Array, default: [] },
     areas: { type: Array, default: [] },
     layers: { type: Array, default: [] },
+    confirmedUsers: { type: Array, default: [] },
     createdAt: { type: Date, required: true, default: Date.now }
 });
 
