@@ -41,10 +41,12 @@ It is necessary to define these environment variables:
 
 ```
 
-name: <String>, required
+name: <String>
 managers: <String>, // array
 users: <String>, // array
+confirmedUsers: <String>, // array
 areas: <String> // array
+createdAt: <Date>
 
 ```
 
@@ -52,17 +54,18 @@ areas: <String> // array
 
 ```
 
-GET: /teams -> Return all teams of the user logged
-GET: /teams/:id -> Return team with the same id. Check if the team is owned of the logged user
+GET: /team/user/:userId -> Return the teams from the user if it exists
+GET: /teams/:id -> Return team with the id
 POST: /teams -> Create an team and associate to the user. With body:
 
     #form data
     name: "my-team"
     managers: [user-id]
     users: [userId, userId2, userId3, ...]
+    confirmedUsers: [userId, userId2, userId3, ...]
     areas: [areaId, areaId2, areaId3, ...]
 
-PATCH: /teams/:id -> Update the area with the same id. Check if the area is owned of the logged user
-DELETE: /teams/:id -> Delete the area with the same id. Check if the area is owned of the logged user
+PATCH: /teams/:id -> Update the team with the id
+DELETE: /teams/:id -> Delete the team with the id
 
 ```
