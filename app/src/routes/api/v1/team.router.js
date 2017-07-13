@@ -30,14 +30,14 @@ class TeamRouter {
   static async create(ctx) {
       logger.info('Saving team', ctx.request.body);
       const includes = (container, value) => container.indexOf(value) >= 0;
-      const remove = (array, value) => { if (array.indexOf(value) > -1) { array.splice(array.indexOf(value), 1);}};
       const body = ctx.request.body;
       const userId = ctx.request.body.loggedUser.id;
 
       if (typeof body.managers === 'undefined') body.managers = [];
       if (!includes(body.managers, userId)) body.managers.push(userId);
-      remove(body.users, userId);
-
+      if (body.users) {
+        body.users = body.users.filter(user => user !== userId);
+      }
       const team = await new TeamModel({
           name: body.name,
           managers: body.managers,
@@ -53,22 +53,20 @@ class TeamRouter {
     static async update(ctx) {
         logger.info(`Updating team with id ${ctx.params.id}`);
         const includes = (container, value) => container.indexOf(value) >= 0;
-        const remove = (array, value) => { if (array.indexOf(value) > -1) { array.splice(array.indexOf(value), 1);}};
         const body = ctx.request.body;
         const userId = body.loggedUser.id;
         const team = await TeamModel.findById(ctx.params.id);
         
-        if (!includes(body.managers, userId)) body.managers.push(userId);
-        remove(body.users, userId);
         if (body.name) {
           team.name = body.name;
         }
         if (body.managers) {
+          if (!includes(body.managers, userId)) body.managers.push(userId);
           team.managers = body.managers;
         }
         if (body.users) {
-        logger.info(`Users ${body.users}`);
-          team.users = body.users;
+          logger.info(`Users ${body.users}`);
+          team.users = body.users.filter(user => user !== userId);
         }
         if (body.confirmedUsers) {
         logger.info(`Users ${body.confirmedUsers}`);
