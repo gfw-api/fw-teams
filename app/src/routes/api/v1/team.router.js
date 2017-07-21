@@ -3,6 +3,7 @@ const logger = require('logger');
 const TeamModel = require('models/team.model');
 const TeamSerializer = require('serializers/team.serializer');
 const TeamValidator = require('validators/team.validator');
+const TeamService = require('services/team.service');
 
 const router = new Router({
     prefix: '/teams',
@@ -38,6 +39,7 @@ class TeamRouter {
       if (body.users) {
         body.users = body.users.filter(user => user !== userId);
       }
+      TeamService.sendNotifications(body.users);
       const team = await new TeamModel({
           name: body.name,
           managers: body.managers,
