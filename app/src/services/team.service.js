@@ -2,6 +2,7 @@ const logger = require('logger');
 const JWT = require('jsonwebtoken');
 const config = require('config');
 const TeamModel = require('models/team.model');
+const mailService = require('services/mailService');
 
 class TeamService {
   
@@ -22,9 +23,9 @@ class TeamService {
     const includes = (container, value) => container.indexOf(value) >= 0;
     users.forEach( async (email) => {
       const generatedToken = this.generateToken(email, team.id);
-      const url = `teams/confirm/${generatedToken}`
+      const link = `${config.get('apiGateway.externalUrl')}/v1/teams/confirm/${generatedToken}`
       if (!includes(team.sentInvitations, email)) {
-        // Send email with token
+        mailService.sendMail('team-invitation-en', {link}, [email]);
         team.sentInvitations = team.sentInvitations.concat(email);
         await team.save;
       }
