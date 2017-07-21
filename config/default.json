@@ -11,5 +11,8 @@
     },
     "mongodb": {
         "database": "fw_teams_db"
+    },
+    "jwt": {
+        "token": "JWT_SECRET"
     }
 }

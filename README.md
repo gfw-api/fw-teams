@@ -34,6 +34,7 @@ It is necessary to define these environment variables:
 
 * CT_URL => Control Tower URL
 * NODE_ENV => Environment (prod, staging, dev)
+* JWT_SECRET => The secret used to generate JWT tokens.
 
 ## Quick Overview
 
