@@ -65,8 +65,8 @@ class TeamRouter {
           layers: body.layers,
           createdAt: Date.now() 
       }).save();
-      ctx.body = TeamSerializer.serialize(team);
       TeamService.sendNotifications(body.users, team);
+      ctx.body = TeamSerializer.serialize(team);
   }
 
 
@@ -102,6 +102,7 @@ class TeamRouter {
         }
 
         await team.save();
+        TeamService.sendNotifications(body.users, team);
         ctx.body = TeamSerializer.serialize(team);
     }
 

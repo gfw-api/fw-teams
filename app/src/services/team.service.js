@@ -1,6 +1,7 @@
 const logger = require('logger');
 const JWT = require('jsonwebtoken');
 const config = require('config');
+const TeamModel = require('models/team.model');
 
 class TeamService {
   
@@ -8,7 +9,7 @@ class TeamService {
     try { 
      return JWT.verify(token, config.get('jwt.token'));
     } catch (e){
-    logger.info(`Generated token ${e}`);
+      logger.info(`Generated token ${e}`);
     }
   }
   static generateToken(email, teamId) {
@@ -18,15 +19,16 @@ class TeamService {
   }
 
   static sendNotifications(users, team) {
-    logger.info(`Sending notifications for ${users} from team id ${team.id}`);
-    const tokens = users.map((email) => {
+    const includes = (container, value) => container.indexOf(value) >= 0;
+    users.forEach( async (email) => {
       const generatedToken = this.generateToken(email, team.id);
-      this.verifyToken(generatedToken);
       const url = `teams/confirm/${generatedToken}`
-      // Send email with token
+      if (!includes(team.sentInvitations, email)) {
+        // Send email with token
+        team.sentInvitations = team.sentInvitations.concat(email);
+        await team.save;
+      }
     });
-    
-    return tokens;
   }
 }
 module.exports = TeamService;
