@@ -35,6 +35,11 @@ It is necessary to define these environment variables:
 * CT_URL => Control Tower URL
 * NODE_ENV => Environment (prod, staging, dev)
 * JWT_SECRET => The secret used to generate JWT tokens.
+* API_GATEWAY_URI => Gateway Service API URL
+* API_GATEWAY_EXTERNAL_URI
+* API_GATEWAY_QUEUE_URL => Url of async queue
+* API_GATEWAY_QUEUE_PROVIDER => redis (only support redis)
+* API_GATEWAY_QUEUE_NAME => mail
 
 ## Quick Overview
 

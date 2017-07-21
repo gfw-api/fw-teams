@@ -50,6 +50,7 @@
     "koa-validate": "^1.0.7",
     "mongoose": "^4.11.0",
     "request": "^2.79.0",
-    "request-promise": "^4.1.1"
+    "request-promise": "^4.1.1",
+    "vizz.async-client": "^1.0.0"
   }
 }
