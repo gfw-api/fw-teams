@@ -4,26 +4,28 @@ const config = require('config');
 
 class TeamService {
   
-  static verifyToken(email) {
-    return JWT.verify(email, config.get('jwt.token'), function(err, decoded) {
-      logger.info(`Decoded token ${decoded}`);
-      return decoded;
-    });
+  static verifyToken(token) {
+    try { 
+     return JWT.verify(token, config.get('jwt.token'));
+    } catch (e){
+    logger.info(`Generated token ${e}`);
+    }
   }
-  static generateToken(email) {
-    const token = JWT.sign(email, config.get('jwt.token'), {});
+  static generateToken(email, teamId) {
+    const token = JWT.sign({ email, teamId }, config.get('jwt.token'), {});
     logger.info(`Generated token ${token}`);
     return token;
   }
 
-  static sendNotifications(users) {
-    logger.info(`Sending notifications for ${users}`);
+  static sendNotifications(users, team) {
+    logger.info(`Sending notifications for ${users} from team id ${team.id}`);
     const tokens = users.map((email) => {
-      return this.generateToken(email)
+      const generatedToken = this.generateToken(email, team.id);
+      this.verifyToken(generatedToken);
+      const url = `teams/confirm/${generatedToken}`
+      // Send email with token
     });
-    tokens.forEach((token) => {
-      this.verifyToken(token)
-    });
+    
     return tokens;
   }
 }

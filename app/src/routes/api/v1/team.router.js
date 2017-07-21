@@ -22,10 +22,28 @@ class TeamRouter {
       if (!team){
         team = await TeamModel.findOne({ confirmedUsers: ctx.params.userId });
       }
-      if (!team){                                                     // REMOVE THIS
-        team = await TeamModel.findOne({ users: ctx.params.userId }); // REMOVE THIS
-      }                                                               // REMOVE THIS
       ctx.body = TeamSerializer.serialize(team);
+  }
+
+  static async confirmUser(ctx) {
+      const includes = (container, value) => container.indexOf(value) >= 0;
+      const token = ctx.params.token;
+      logger.info('Confirming user with token', token);
+      
+      const data = TeamService.verifyToken(token);
+      if (data) {
+        const { email, teamId } = data;
+        let team = await TeamModel.findOne({ users: email });
+
+        if (team && !includes(team.confirmedUsers, email)){
+          team.users = team.users.filter(user => user !== email);
+          team.confirmedUsers = team.confirmedUsers.concat(email);  
+          await team.save();
+          ctx.body = {status: 200, detail: 'User confirmed'};
+        } else {
+          ctx.body = {status: 304, detail: 'Not modified'};
+        }
+      }
   }
 
   static async create(ctx) {
@@ -39,7 +57,6 @@ class TeamRouter {
       if (body.users) {
         body.users = body.users.filter(user => user !== userId);
       }
-      TeamService.sendNotifications(body.users);
       const team = await new TeamModel({
           name: body.name,
           managers: body.managers,
@@ -49,6 +66,7 @@ class TeamRouter {
           createdAt: Date.now() 
       }).save();
       ctx.body = TeamSerializer.serialize(team);
+      TeamService.sendNotifications(body.users, team);
   }
 
 
@@ -104,5 +122,6 @@ router.get('/user/:userId', TeamRouter.getByUserId);
 router.post('/', TeamValidator.create, TeamRouter.create);
 router.patch('/:id', TeamValidator.update, TeamRouter.update);
 router.delete('/:id', TeamRouter.delete);
+router.get('/confirm/:token', TeamRouter.confirmUser);
 
 module.exports = router;
