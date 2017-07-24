@@ -1,8 +1,8 @@
 const logger = require('logger');
 const JWT = require('jsonwebtoken');
 const config = require('config');
-const TeamModel = require('models/team.model');
 const MailService = require('services/MailService');
+const UserService = require('services/user.service');
 
 class TeamService {
   
@@ -30,6 +30,15 @@ class TeamService {
         team.sentInvitations = team.sentInvitations.concat(email);
         await team.save;
       }
+    });
+  }
+
+  static sendManagerConfirmation(confirmedUserEmail, managers, locale) {
+    managers.forEach( async (managerId) => {
+      const joinedMailId = `team-joined-${locale || 'en'}`;
+      const managerEmail = UserService.getEmailById(managerId);
+      let recipients = [{ address: { managerEmail } }];
+      MailService.sendMail(joinedMailId, { email: confirmedUserEmail }, recipients);
     });
   }
 }

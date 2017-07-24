@@ -35,14 +35,18 @@ class TeamRouter {
         const { email, teamId } = data;
         const team = await TeamModel.findById(teamId);
 
-        if (team && !includes(team.confirmedUsers, email)){
+
+        if (team && includes(team.confirmedUsers, email)){
           team.users = team.users.filter(user => user !== email);
-          team.confirmedUsers = team.confirmedUsers.concat(email);  
+          team.confirmedUsers = team.confirmedUsers.concat(email);
+          TeamService.sendManagerConfirmation(email, team.managers, ctx.request.body.locale);
           await team.save();
-          ctx.body = {status: 200, detail: 'User confirmed'};
+          ctx.body = { status: 200, detail: 'User confirmed' };
         } else {
-          ctx.body = {status: 304, detail: 'Not modified'};
+          ctx.body = { status: 304, detail: 'Not modified' };
         }
+      } else {
+          ctx.body = { status: 404, detail: 'Token not found' };
       }
   }
 
