@@ -4,6 +4,7 @@ const TeamModel = require('models/team.model');
 const TeamSerializer = require('serializers/team.serializer');
 const TeamValidator = require('validators/team.validator');
 const TeamService = require('services/team.service');
+const UserService = require('services/user.service');
 
 const router = new Router({
     prefix: '/teams',
@@ -19,8 +20,8 @@ class TeamRouter {
   static async getByUserId(ctx) {
       logger.info(`Getting team for user with id ${ctx.params.userId}`);
       let team = await TeamModel.findOne({ managers: ctx.params.userId });
-      if (!team){
-        team = await TeamModel.findOne({ confirmedUsers: ctx.params.userId });
+      if (!team) {
+        team = await TeamModel.findOne({ confirmedUsers: UserService.getEmailById(ctx.params.userId) });
       }
       ctx.body = TeamSerializer.serialize(team);
   }
