@@ -37,8 +37,7 @@ class TeamRouter {
         const { email, teamId } = data;
         const team = await TeamModel.findById(teamId);
 
-
-        if (team && includes(team.confirmedUsers, email)){
+        if (team && !includes(team.confirmedUsers, email)) {
           team.users = team.users.filter(user => user !== email);
           team.confirmedUsers = team.confirmedUsers.concat(email);
           TeamService.sendManagerConfirmation(email, team.managers, ctx.request.body.locale);
