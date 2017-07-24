@@ -33,7 +33,7 @@ class TeamRouter {
       const data = TeamService.verifyToken(token);
       if (data) {
         const { email, teamId } = data;
-        let team = await TeamModel.findOne({ users: email });
+        const team = await TeamModel.findById(teamId);
 
         if (team && !includes(team.confirmedUsers, email)){
           team.users = team.users.filter(user => user !== email);
