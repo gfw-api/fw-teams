@@ -15,6 +15,7 @@ develop:
     API_GATEWAY_QUEUE_URL: redis://mymachine:6379
     API_GATEWAY_QUEUE_PROVIDER: redis
     API_GATEWAY_QUEUE_NAME: mail
+    REFERRAL_URL: http://localhost:3000/settings
   command: develop
   volumes:
     - ./app:/opt/fw-teams/app

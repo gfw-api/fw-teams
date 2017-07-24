@@ -5,6 +5,7 @@ const TeamSerializer = require('serializers/team.serializer');
 const TeamValidator = require('validators/team.validator');
 const TeamService = require('services/team.service');
 const UserService = require('services/user.service');
+const config = require('config');
 
 const router = new Router({
     prefix: '/teams',
@@ -42,10 +43,8 @@ class TeamRouter {
           team.confirmedUsers = team.confirmedUsers.concat(email);
           TeamService.sendManagerConfirmation(email, team.managers, ctx.request.body.locale);
           await team.save();
-          ctx.body = { status: 200, detail: 'User confirmed' };
-        } else {
-          ctx.body = { status: 304, detail: 'Not modified' };
         }
+        ctx.redirect(config.get('application.referralUrl'));
       } else {
           ctx.body = { status: 404, detail: 'Token not found' };
       }

@@ -15,5 +15,8 @@
         "queueUrl": "API_GATEWAY_QUEUE_URL",
         "queueProvider": "API_GATEWAY_QUEUE_PROVIDER",
         "queueName": "API_GATEWAY_QUEUE_NAME"
+    },
+    "application":{
+        "referralUrl": "REFERRAL_URL"
     }
 }
