@@ -55,6 +55,7 @@ class TeamRouter {
       const includes = (container, value) => container.indexOf(value) >= 0;
       const body = ctx.request.body;
       const userId = ctx.request.body.loggedUser.id;
+      const locale = body.locale;
 
       if (typeof body.managers === 'undefined') body.managers = [];
       if (!includes(body.managers, userId)) body.managers.push(userId);
@@ -69,7 +70,7 @@ class TeamRouter {
           layers: body.layers,
           createdAt: Date.now() 
       }).save();
-      TeamService.sendNotifications(body.users, team);
+      TeamService.sendNotifications(body.users, team, locale);
       ctx.body = TeamSerializer.serialize(team);
   }
 
@@ -80,6 +81,7 @@ class TeamRouter {
         const body = ctx.request.body;
         const userId = body.loggedUser.id;
         const team = await TeamModel.findById(ctx.params.id);
+        const locale = body.locale;
         
         if (body.name) {
           team.name = body.name;
@@ -106,7 +108,7 @@ class TeamRouter {
         }
 
         await team.save();
-        TeamService.sendNotifications(body.users, team);
+        TeamService.sendNotifications(body.users, team, locale);
         ctx.body = TeamSerializer.serialize(team);
     }
 

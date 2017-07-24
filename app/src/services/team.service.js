@@ -19,14 +19,16 @@ class TeamService {
     return token;
   }
 
-  static sendNotifications(users, team) {
+  static sendNotifications(users, team, locale) {
     const includes = (container, value) => container.indexOf(value) >= 0;
     users.forEach( async (email) => {
       const generatedToken = this.generateToken(email, team.id);
       const link = `${config.get('apiGateway.externalUrl')}/v1/teams/confirm/${generatedToken}`;
       if (!includes(team.sentInvitations, email)) {
+        const invitationMailId = `team-invitation-${locale || 'en'}`;
+        const joinedMailId = `team-joined-${locale || 'en'}`;
         let recipients = [{ address: { email } }];
-        MailService.sendMail('team-invitation-en', { link }, recipients);
+        MailService.sendMail(invitationMailId, { link }, recipients);
         team.sentInvitations = team.sentInvitations.concat(email);
         await team.save;
       }
