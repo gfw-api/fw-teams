@@ -22,7 +22,7 @@ class TeamRouter {
       logger.info(`Getting team for user with id ${ctx.params.userId}`);
       let team = await TeamModel.findOne({ managers: ctx.params.userId });
       if (!team) {
-        team = await TeamModel.findOne({ confirmedUsers: ctx.params.userId });
+        team = await TeamModel.findOne({ "confirmedUsers.id": ctx.params.userId });
       }
       ctx.body = TeamSerializer.serialize(team);
   }
@@ -35,10 +35,10 @@ class TeamRouter {
       if (data) {
         const { email, teamId } = data;
         const team = await TeamModel.findById(teamId);
-
-        if (team && !team.confirmedUsers.includes(email)) {
+        const confirmedUserEmails = team.confirmedUsers.map(u => (typeof u === 'string' ? u : u.email));
+        if (team && !confirmedUserEmails.includes(email)) {
           team.users = team.users.filter(user => user !== email);
-          team.confirmedUsers = team.confirmedUsers.concat(userId);
+          team.confirmedUsers = team.confirmedUsers.concat({ id: userId, email });
           TeamService.sendManagerConfirmation(email, team.managers, ctx.request.body.locale);
           await team.save();
         }
