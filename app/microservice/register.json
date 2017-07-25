@@ -45,6 +45,7 @@
 		},{
 			"path": "/v1/teams/confirm/:token",
 			"method": "GET",
+			"authenticated": true,
 			"redirect": {
 				"method": "GET",
 				"path": "/api/v1/teams/confirm/:token"

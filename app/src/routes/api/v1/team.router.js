@@ -28,22 +28,22 @@ class TeamRouter {
   }
 
   static async confirmUser(ctx) {
-      const includes = (container, value) => container.indexOf(value) >= 0;
       const token = ctx.params.token;
+      const userId = ctx.request.body.loggedUser.id;
       logger.info('Confirming user with token', token);
-      
       const data = TeamService.verifyToken(token);
       if (data) {
         const { email, teamId } = data;
         const team = await TeamModel.findById(teamId);
 
-        if (team && !includes(team.confirmedUsers, email)) {
+        if (team && !team.confirmedUsers.includes(email)) {
           team.users = team.users.filter(user => user !== email);
-          team.confirmedUsers = team.confirmedUsers.concat(email);
+          team.confirmedUsers = team.confirmedUsers.concat(userId);
           TeamService.sendManagerConfirmation(email, team.managers, ctx.request.body.locale);
           await team.save();
         }
-        ctx.redirect(config.get('application.referralUrl'));
+        const redirectUrl = `${config.get('application.url')}/settings?token=${token}`;        
+        ctx.redirect(redirectUrl);
       } else {
           ctx.body = { status: 404, detail: 'Token not found' };
       }
