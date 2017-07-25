@@ -42,8 +42,7 @@ class TeamRouter {
           TeamService.sendManagerConfirmation(email, team.managers, ctx.request.body.locale);
           await team.save();
         }
-        const redirectUrl = `${config.get('application.url')}/settings?token=${token}`;        
-        ctx.redirect(redirectUrl);
+        ctx.body = { status: 200, detail: 'User confirmed' };
       } else {
           ctx.body = { status: 404, detail: 'Token not found' };
       }
