@@ -22,7 +22,7 @@ class TeamRouter {
       logger.info(`Getting team for user with id ${ctx.params.userId}`);
       let team = await TeamModel.findOne({ managers: ctx.params.userId });
       if (!team) {
-        team = await TeamModel.findOne({ confirmedUsers: UserService.getEmailById(ctx.params.userId) });
+        team = await TeamModel.findOne({ confirmedUsers: ctx.params.userId });
       }
       ctx.body = TeamSerializer.serialize(team);
   }
