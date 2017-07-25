@@ -20,15 +20,12 @@ class TeamService {
   }
 
   static sendNotifications(users, team, locale) {
-    const includes = (container, value) => container.indexOf(value) >= 0;
     users.forEach( async (email) => {
       const generatedToken = this.generateToken(email, team.id);
-      const link = `${config.get('apiGateway.externalUrl')}/v1/teams/confirm/${generatedToken}`;
-      if (!includes(team.sentInvitations, email)) {
+      const link = `${config.get('application.url')}?callbackUrl=${config.get('application.url')}?confirmToken=${generatedToken}&confirmToken=${generatedToken}`;
+      if (!team.sentInvitations.includes(email)) {
         const invitationMailId = `team-invitation-${locale || 'en'}`;
-        const joinedMailId = `team-joined-${locale || 'en'}`;
-        let recipients = [{ address: { email } }];
-        MailService.sendMail(invitationMailId, { link }, recipients);
+        MailService.sendMail(invitationMailId, { link }, [{ address: { email } }]);
         team.sentInvitations = team.sentInvitations.concat(email);
         await team.save;
       }
@@ -39,8 +36,7 @@ class TeamService {
     managers.forEach( async (managerId) => {
       const joinedMailId = `team-joined-${locale || 'en'}`;
       const managerEmail = UserService.getEmailById(managerId);
-      let recipients = [{ address: { managerEmail } }];
-      MailService.sendMail(joinedMailId, { email: confirmedUserEmail }, recipients);
+      MailService.sendMail(joinedMailId, { email: confirmedUserEmail }, [{ address: { managerEmail } }]);
     });
   }
 }
