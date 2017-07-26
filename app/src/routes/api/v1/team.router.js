@@ -30,6 +30,8 @@ class TeamRouter {
   static async confirmUser(ctx) {
       const token = ctx.params.token;
       logger.info('Confirming user with token', token);
+      logger.info('ctx', ctx);
+      logger.info('ctx.query', ctx.query);
       const userId = ctx.query.loggedUser.id;
       const data = TeamService.verifyToken(token);
       if (data) {
@@ -43,6 +45,7 @@ class TeamRouter {
           TeamService.sendManagerConfirmation(email, team.managers, ctx.request.body.locale);
           await team.save();
         }
+        logger.info('saved team', team);
         ctx.body = { status: 200, detail: 'User confirmed' };
       } else {
           ctx.body = { status: 404, detail: 'Token not found' };
