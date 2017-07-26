@@ -29,9 +29,13 @@ class TeamRouter {
 
   static async confirmUser(ctx) {
       const token = ctx.params.token;
-      const userId = ctx.request.body.loggedUser.id;
       logger.info('Confirming user with token', token);
+      logger.info('query', ctx.request.query);
+      const query = ctx.request.query;
+      const userId = query.loggedUser.id;
+      logger.info('userId', userId);
       const data = TeamService.verifyToken(token);
+      if (!userId) ctx.throw(400, 'User missing');
       if (data) {
         const { email, teamId } = data;
         const team = await TeamModel.findById(teamId);
@@ -42,10 +46,10 @@ class TeamRouter {
           TeamService.sendManagerConfirmation(email, team.managers, ctx.request.body.locale);
           await team.save();
         }
-        const redirectUrl = `${config.get('application.url')}/settings?token=${token}`;        
-        ctx.redirect(redirectUrl);
+        logger.info('saved team', team);
+        ctx.body = { status: 200, detail: 'User confirmed' };
       } else {
-          ctx.body = { status: 404, detail: 'Token not found' };
+        ctx.throw(400, 'Token not found');
       }
   }
 
