@@ -32,7 +32,7 @@ class TeamService {
     });
   }
 
-  static sendManagerConfirmation(confirmedUserEmail, managers, locale) {
+  static sendManagerConfirmation(confirmedUserEmail, managers = [], locale) {
     managers.forEach( async (managerId) => {
       const joinedMailId = `team-joined-${locale || 'en'}`;
       const managerEmail = UserService.getEmailById(managerId);
