@@ -3,6 +3,9 @@ const logger = require('logger');
 const TeamModel = require('models/team.model');
 const TeamSerializer = require('serializers/team.serializer');
 const TeamValidator = require('validators/team.validator');
+const TeamService = require('services/team.service');
+const UserService = require('services/user.service');
+const config = require('config');
 
 const router = new Router({
     prefix: '/teams',
@@ -18,13 +21,31 @@ class TeamRouter {
   static async getByUserId(ctx) {
       logger.info(`Getting team for user with id ${ctx.params.userId}`);
       let team = await TeamModel.findOne({ managers: ctx.params.userId });
-      if (!team){
+      if (!team) {
         team = await TeamModel.findOne({ confirmedUsers: ctx.params.userId });
       }
-      if (!team){                                                     // REMOVE THIS
-        team = await TeamModel.findOne({ users: ctx.params.userId }); // REMOVE THIS
-      }                                                               // REMOVE THIS
       ctx.body = TeamSerializer.serialize(team);
+  }
+
+  static async confirmUser(ctx) {
+      const token = ctx.params.token;
+      const userId = ctx.request.body.loggedUser.id;
+      logger.info('Confirming user with token', token);
+      const data = TeamService.verifyToken(token);
+      if (data) {
+        const { email, teamId } = data;
+        const team = await TeamModel.findById(teamId);
+
+        if (team && !team.confirmedUsers.includes(email)) {
+          team.users = team.users.filter(user => user !== email);
+          team.confirmedUsers = team.confirmedUsers.concat(userId);
+          TeamService.sendManagerConfirmation(email, team.managers, ctx.request.body.locale);
+          await team.save();
+        }
+        ctx.body = { status: 200, detail: 'User confirmed' };
+      } else {
+          ctx.body = { status: 404, detail: 'Token not found' };
+      }
   }
 
   static async create(ctx) {
@@ -32,6 +53,7 @@ class TeamRouter {
       const includes = (container, value) => container.indexOf(value) >= 0;
       const body = ctx.request.body;
       const userId = ctx.request.body.loggedUser.id;
+      const locale = body.locale;
 
       if (typeof body.managers === 'undefined') body.managers = [];
       if (!includes(body.managers, userId)) body.managers.push(userId);
@@ -46,6 +68,7 @@ class TeamRouter {
           layers: body.layers,
           createdAt: Date.now() 
       }).save();
+      TeamService.sendNotifications(body.users, team, locale);
       ctx.body = TeamSerializer.serialize(team);
   }
 
@@ -56,6 +79,7 @@ class TeamRouter {
         const body = ctx.request.body;
         const userId = body.loggedUser.id;
         const team = await TeamModel.findById(ctx.params.id);
+        const locale = body.locale;
         
         if (body.name) {
           team.name = body.name;
@@ -82,6 +106,7 @@ class TeamRouter {
         }
 
         await team.save();
+        TeamService.sendNotifications(body.users, team, locale);
         ctx.body = TeamSerializer.serialize(team);
     }
 
@@ -102,5 +127,6 @@ router.get('/user/:userId', TeamRouter.getByUserId);
 router.post('/', TeamValidator.create, TeamRouter.create);
 router.patch('/:id', TeamValidator.update, TeamRouter.update);
 router.delete('/:id', TeamRouter.delete);
+router.get('/confirm/:token', TeamRouter.confirmUser);
 
 module.exports = router;

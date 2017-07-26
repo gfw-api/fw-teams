@@ -11,5 +11,18 @@
     },
     "mongodb": {
         "database": "fw_teams_db"
+    },
+    "jwt": {
+        "token": "JWT_SECRET"
+    },
+    "apiGateway":{
+        "uri": "API_GATEWAY_URI",
+        "externalUrl": "API_GATEWAY_EXTERNAL_URL",
+        "queueUrl": "API_GATEWAY_QUEUE_URL",
+        "queueProvider": "API_GATEWAY_QUEUE_PROVIDER",
+        "queueName": "API_GATEWAY_QUEUE_NAME"
+    },
+    "application":{
+        "url": "APP_URL"
     }
 }
