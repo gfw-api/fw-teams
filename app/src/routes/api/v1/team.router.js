@@ -29,12 +29,13 @@ class TeamRouter {
 
   static async confirmUser(ctx) {
       const token = ctx.params.token;
-      const userId = ctx.request.body.loggedUser.id;
       logger.info('Confirming user with token', token);
+      const userId = ctx.query.loggedUser.id;
       const data = TeamService.verifyToken(token);
       if (data) {
         const { email, teamId } = data;
         const team = await TeamModel.findById(teamId);
+        logger.info('Confirming user with teamId', teamId);
 
         if (team && !team.confirmedUsers.includes(email)) {
           team.users = team.users.filter(user => user !== email);
