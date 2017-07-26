@@ -31,8 +31,8 @@ class TeamRouter {
       const token = ctx.params.token;
       logger.info('Confirming user with token', token);
       logger.info('query', ctx.request.query);
-      const query = ctx.request.query;
-      const userId = query.loggedUser.id;
+      const loggedUser = JSON.parse(ctx.request.query.loggedUser);
+      const userId = loggedUser.id;
       logger.info('userId', userId);
       const data = TeamService.verifyToken(token);
       if (!userId) ctx.throw(400, 'User missing');
