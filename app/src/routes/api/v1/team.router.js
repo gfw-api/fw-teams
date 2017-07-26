@@ -31,8 +31,8 @@ class TeamRouter {
       const token = ctx.params.token;
       logger.info('Confirming user with token', token);
       logger.info('ctx.query', ctx.query);
-      const loggedUser = JSON.parse(ctx.query.loggedUser);
-      const userId = loggedUser.id;
+      const query = JSON.parse(ctx.query);
+      const userId = query.loggedUser.id;
       logger.info('userId', userId);
       const data = TeamService.verifyToken(token);
       if (data) {
