@@ -19,7 +19,7 @@ class TeamService {
     return token;
   }
 
-  static sendNotifications(users, team, locale) {
+  static sendNotifications(users = [], team, locale) {
     users.forEach( async (email) => {
       const generatedToken = this.generateToken(email, team.id);
       const link = `${config.get('application.url')}?callbackUrl=${config.get('application.url')}?confirmToken=${generatedToken}&confirmToken=${generatedToken}`;
