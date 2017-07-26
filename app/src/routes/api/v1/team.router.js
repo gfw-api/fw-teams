@@ -30,9 +30,10 @@ class TeamRouter {
   static async confirmUser(ctx) {
       const token = ctx.params.token;
       logger.info('Confirming user with token', token);
-      logger.info('ctx', ctx);
       logger.info('ctx.query', ctx.query);
-      const userId = ctx.query.loggedUser.id;
+      const loggedUser = JSON.parse(ctx.query.loggedUser);
+      const userId = loggedUser.id;
+      logger.info('userId', userId);
       const data = TeamService.verifyToken(token);
       if (data) {
         const { email, teamId } = data;
