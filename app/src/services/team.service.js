@@ -45,13 +45,11 @@ class TeamService {
     const userTeams = await TeamModel.find({ confirmedUsers: userId });
     logger.info(`User was in ${userTeams}`);
     userTeams.forEach( async (team) => {
-      if (team.id !== teamId) {
-        const teamToChange = await TeamModel.findById(team.id);
-        logger.info(`Team id ${teamToChange.id}`);
-        teamToChange.confirmedUsers = teamToChange.confirmedUsers.filter((user) => user !== userId);
-        logger.info(`User ${userId} is not in ${teamToChange.confirmedUsers}`);
-        await teamToChange.save;
-      }
+      const teamToChange = await TeamModel.findById(team.id);
+      logger.info(`Team id ${teamToChange.id}`);
+      teamToChange.confirmedUsers = teamToChange.confirmedUsers.filter((user) => user !== userId);
+      await teamToChange.save;  
+      logger.info(`Team ${teamToChange} is saved`);
     });
     logger.info(`User is in ${userTeams}`);
   }
