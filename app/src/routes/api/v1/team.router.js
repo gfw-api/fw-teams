@@ -4,8 +4,6 @@ const TeamModel = require('models/team.model');
 const TeamSerializer = require('serializers/team.serializer');
 const TeamValidator = require('validators/team.validator');
 const TeamService = require('services/team.service');
-const UserService = require('services/user.service');
-const config = require('config');
 
 const router = new Router({
     prefix: '/teams',
@@ -30,18 +28,16 @@ class TeamRouter {
   static async confirmUser(ctx) {
       const token = ctx.params.token;
       logger.info('Confirming user with token', token);
-      logger.info('query', ctx.request.query);
       const loggedUser = JSON.parse(ctx.request.query.loggedUser);
       const userId = loggedUser.id;
-      logger.info('userId', userId);
       const data = TeamService.verifyToken(token);
       if (!userId) ctx.throw(400, 'User missing');
       if (data) {
         const { email, teamId } = data;
         const team = await TeamModel.findById(teamId);
-        logger.info('Confirming user with teamId', teamId);
 
         if (team && !team.confirmedUsers.includes(email)) {
+          TeamService.deleteConfirmedUserFromPreviousTeams(userId, teamId);
           team.users = team.users.filter(user => user !== email);
           team.confirmedUsers = team.confirmedUsers.concat(userId);
           TeamService.sendManagerConfirmation(email, team.managers, ctx.request.body.locale);
