@@ -40,7 +40,7 @@ class TeamRouter {
           TeamService.deleteConfirmedUserFromPreviousTeams(userId, teamId);
           team.users = team.users.filter(user => user !== email);
           team.confirmedUsers = team.confirmedUsers.concat(userId);
-          TeamService.sendManagerConfirmation(email, team.managers, ctx.request.body.locale);
+          // TeamService.sendManagerConfirmation(email, team.managers, ctx.request.body.locale);
           await team.save();
         }
         logger.info('saved team', team);

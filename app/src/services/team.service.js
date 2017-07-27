@@ -41,16 +41,17 @@ class TeamService {
     });
   }
 
+  static async deleteConfirmedUser(teamId, userId) {
+    const team = await TeamModel.findById(teamId);
+    team.confirmedUsers = team.confirmedUsers.filter((user) => user !== userId);
+    await team.save;
+    logger.info(`Team ${team} is saved`);
+  }
+
   static async deleteConfirmedUserFromPreviousTeams(userId, teamId) {
     const userTeams = await TeamModel.find({ confirmedUsers: userId });
     logger.info(`User was in ${userTeams}`);
-    userTeams.forEach( async (team) => {
-      const teamToChange = await TeamModel.findById(team.id);
-      logger.info(`Team id ${teamToChange.id}`);
-      teamToChange.confirmedUsers = teamToChange.confirmedUsers.filter((user) => user !== userId);
-      await teamToChange.save;  
-      logger.info(`Team ${teamToChange} is saved`);
-    });
+    userTeams.forEach(team => this.deleteConfirmedUsers(team.id, userId));
     logger.info(`User is in ${userTeams}`);
   }
 }
