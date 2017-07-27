@@ -20,7 +20,7 @@ class TeamRouter {
 
   static async getByUserId(ctx) {
       logger.info(`Getting team for user with id ${ctx.params.userId}`);
-      let team = await TeamModel.findOne({ managers: ctx.params.userId });
+      let team = await TeamModel.findOne({ "managers.id": ctx.params.userId });
       if (!team) {
         team = await TeamModel.findOne({ "confirmedUsers.id": ctx.params.userId });
       }
