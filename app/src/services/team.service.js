@@ -28,7 +28,7 @@ class TeamService {
         const invitationMailId = `team-invitation-${locale || 'en'}`;
         MailService.sendMail(invitationMailId, { link }, [{ address: { email } }]);
         team.sentInvitations = team.sentInvitations.concat(email);
-        await team.save;
+        await team.save();
       }
     });
   }
@@ -41,18 +41,12 @@ class TeamService {
     });
   }
 
-  static async deleteConfirmedUsers(teamId, userId) {
-    const team = await TeamModel.findById(teamId);
-    team.confirmedUsers = team.confirmedUsers.filter((user) => user !== userId);
-    await team.save;
-    logger.info(`Team ${team} is saved`);
-  }
-
   static async deleteConfirmedUserFromPreviousTeams(userId, teamId) {
-    const userTeams = await TeamModel.find({ confirmedUsers: userId });
-    logger.info(`User was in ${userTeams}`);
-    userTeams.forEach(team => this.deleteConfirmedUsers(team.id, userId));
-    logger.info(`User is in ${userTeams}`);
+    const userTeam = await TeamModel.findOne({ confirmedUsers: userId });
+    logger.info(`User was in ${userTeam}`);
+    userTeam.confirmedUsers = userTeam.confirmedUsers.filter((user) => user !== userId);
+    await userTeam.save();
+    logger.info(`User is not in ${userTeam}`);
   }
 }
 module.exports = TeamService;
