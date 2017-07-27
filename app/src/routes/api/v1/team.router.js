@@ -4,6 +4,7 @@ const TeamModel = require('models/team.model');
 const TeamSerializer = require('serializers/team.serializer');
 const TeamValidator = require('validators/team.validator');
 const TeamService = require('services/team.service');
+const UserService = require('services/user.service');
 
 const router = new Router({
     prefix: '/teams',
