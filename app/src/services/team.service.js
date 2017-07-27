@@ -41,7 +41,7 @@ class TeamService {
     });
   }
 
-  static async deleteConfirmedUser(teamId, userId) {
+  static async deleteConfirmedUsers(teamId, userId) {
     const team = await TeamModel.findById(teamId);
     team.confirmedUsers = team.confirmedUsers.filter((user) => user !== userId);
     await team.save;
