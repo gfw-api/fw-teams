@@ -35,8 +35,6 @@ class TeamRouter {
       if (!userId) ctx.throw(400, 'User missing');
       if (data) {
         const { email, teamId } = data;
-        const userEmail = await UserService.getEmailById(userId);
-        if (userEmail !== email) ctx.throw(400, 'Email to confirm and your email do not match');
         const team = await TeamModel.findById(teamId);
         if (team && !team.confirmedUsers.includes(email)) {
           TeamService.deleteConfirmedUserFromPreviousTeams(userId, teamId);
