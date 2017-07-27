@@ -3,6 +3,7 @@ const JWT = require('jsonwebtoken');
 const config = require('config');
 const MailService = require('services/MailService');
 const UserService = require('services/user.service');
+const TeamModel = require('models/team.model');
 
 class TeamService {
   
@@ -19,7 +20,7 @@ class TeamService {
     return token;
   }
 
-  static sendNotifications(users, team, locale) {
+  static sendNotifications(users = [], team, locale) {
     users.forEach( async (email) => {
       const generatedToken = this.generateToken(email, team.id);
       const link = `${config.get('application.url')}?callbackUrl=${config.get('application.url')}?confirmToken=${generatedToken}&confirmToken=${generatedToken}`;
@@ -27,7 +28,7 @@ class TeamService {
         const invitationMailId = `team-invitation-${locale || 'en'}`;
         MailService.sendMail(invitationMailId, { link }, [{ address: { email } }]);
         team.sentInvitations = team.sentInvitations.concat(email);
-        await team.save;
+        await team.save();
       }
     });
   }
@@ -38,6 +39,14 @@ class TeamService {
       let managerEmail = manager.email ||  await UserService.getEmailById(manager.id);
       MailService.sendMail(joinedMailId, { email: confirmedUserEmail }, [{ address: { managerEmail } }]);
     });
+  }
+
+  static async deleteConfirmedUserFromPreviousTeams(userId, teamId) {
+    const userTeam = await TeamModel.findOne({ confirmedUsers: userId });
+    logger.info(`User was in ${userTeam}`);
+    userTeam.confirmedUsers = userTeam.confirmedUsers.filter((user) => user !== userId);
+    await userTeam.save();
+    logger.info(`User is not in ${userTeam}`);
   }
 }
 module.exports = TeamService;
