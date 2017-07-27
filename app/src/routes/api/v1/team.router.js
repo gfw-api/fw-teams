@@ -59,9 +59,12 @@ class TeamRouter {
       const body = ctx.request.body;
       const userId = ctx.request.body.loggedUser.id;
       const locale = body.locale;
+      const managerEmail = await UserService.getEmailById(userId);
 
       if (typeof body.managers === 'undefined') body.managers = [];
-      if (!includes(body.managers, userId)) body.managers.push(userId);
+      if (!includes(body.managers.map(m => m.id), userId)) {
+        body.managers.push({ id: userId, email: managerEmail });
+      }
       if (body.users) {
         body.users = body.users.filter(user => user !== userId);
       }
@@ -90,7 +93,10 @@ class TeamRouter {
           team.name = body.name;
         }
         if (body.managers) {
-          if (!includes(body.managers, userId)) body.managers.push(userId);
+          if (!includes(body.managers.map(m => m.id), userId)) {
+            const managerEmail = await UserService.getEmailById(userId);
+            body.managers.push({ id: userId, email: managerEmail });
+          }
           team.managers = body.managers;
         }
         if (body.users) {
