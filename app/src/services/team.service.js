@@ -23,7 +23,7 @@ class TeamService {
   static sendNotifications(users = [], team, locale) {
     users.forEach( async (email) => {
       const generatedToken = this.generateToken(email, team.id);
-      const link = `${config.get('application.url')}login?callbackUrl=${config.get('application.url')}settings?confirmToken=${generatedToken}&confirmToken=${generatedToken}`;
+      const link = `${config.get('application.url')}/login?callbackUrl=${config.get('application.url')}/settings?confirmToken=${generatedToken}&confirmToken=${generatedToken}`;
       if (!team.sentInvitations.includes(email)) {
         const invitationMailId = `team-invitation-${locale || 'en'}`;
         MailService.sendMail(invitationMailId, { link }, [{ address: { email } }]);
