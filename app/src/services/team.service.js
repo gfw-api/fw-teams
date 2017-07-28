@@ -23,12 +23,12 @@ class TeamService {
   static sendNotifications(users = [], team, locale) {
     users.forEach( async (email) => {
       const generatedToken = this.generateToken(email, team.id);
-      const link = `${config.get('application.url')}?callbackUrl=${config.get('application.url')}?confirmToken=${generatedToken}&confirmToken=${generatedToken}`;
+      const link = `${config.get('application.url')}/login?callbackUrl=${config.get('application.url')}/settings?confirmToken=${generatedToken}&confirmToken=${generatedToken}`;
       if (!team.sentInvitations.includes(email)) {
         const invitationMailId = `team-invitation-${locale || 'en'}`;
         MailService.sendMail(invitationMailId, { link }, [{ address: { email } }]);
         team.sentInvitations = team.sentInvitations.concat(email);
-        await team.save;
+        await team.save();
       }
     });
   }
@@ -42,18 +42,11 @@ class TeamService {
   }
 
   static async deleteConfirmedUserFromPreviousTeams(userId, teamId) {
-    const userTeams = await TeamModel.find({ confirmedUsers: userId });
-    logger.info(`User was in ${userTeams}`);
-    userTeams.forEach( async (team) => {
-      if (team.id !== teamId) {
-        const teamToChange = await TeamModel.findById(team.id);
-        logger.info(`Team id ${teamToChange.id}`);
-        teamToChange.confirmedUsers = teamToChange.confirmedUsers.filter((user) => user !== userId);
-        logger.info(`User ${userId} is not in ${teamToChange.confirmedUsers}`);
-        await teamToChange.save;
-      }
-    });
-    logger.info(`User is in ${userTeams}`);
+    const userTeam = await TeamModel.findOne({ confirmedUsers: userId });
+    logger.info(`User was in ${userTeam}`);
+    userTeam.confirmedUsers = userTeam.confirmedUsers.filter((user) => user !== userId);
+    await userTeam.save();
+    logger.info(`User is not in ${userTeam}`);
   }
 }
 module.exports = TeamService;

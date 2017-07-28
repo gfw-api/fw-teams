@@ -4,6 +4,7 @@ const TeamModel = require('models/team.model');
 const TeamSerializer = require('serializers/team.serializer');
 const TeamValidator = require('validators/team.validator');
 const TeamService = require('services/team.service');
+const UserService = require('services/user.service');
 
 const router = new Router({
     prefix: '/teams',
@@ -35,12 +36,11 @@ class TeamRouter {
       if (data) {
         const { email, teamId } = data;
         const team = await TeamModel.findById(teamId);
-
         if (team && !team.confirmedUsers.includes(email)) {
           TeamService.deleteConfirmedUserFromPreviousTeams(userId, teamId);
           team.users = team.users.filter(user => user !== email);
           team.confirmedUsers = team.confirmedUsers.concat(userId);
-          TeamService.sendManagerConfirmation(email, team.managers, ctx.request.body.locale);
+          // TeamService.sendManagerConfirmation(email, team.managers, ctx.request.body.locale);
           await team.save();
         }
         logger.info('saved team', team);
