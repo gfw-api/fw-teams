@@ -12,7 +12,7 @@ class UserService {
       });
       if (!user || !user.data) return null;
       logger.info('Get user by user id', user);
-      return user.data && user.data.attributes.email;
+      return user.data ? user.data.attributes.email : null;
     }
     catch (e) {
       logger.info('Error finding user', e);
