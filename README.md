@@ -50,8 +50,8 @@ It is necessary to define these environment variables:
 name: <String>
 managers: <String>, // array
 users: <String>, // array
-confirmedUsers: <String>, // array
-areas: <String> // array
+confirmedUsers: <Object>, // array
+areas: <Object> // array
 createdAt: <Date>
 
 ```
@@ -66,10 +66,10 @@ POST: /teams -> Create an team and associate to the user. With body:
 
     #form data
     name: "my-team"
-    managers: [user-id]
-    users: [userId, userId2, userId3, ...]
-    confirmedUsers: [userId, userId2, userId3, ...]
-    areas: [areaId, areaId2, areaId3, ...]
+    managers: [{ id: "userId", email: user@email.com }]
+    users: ["userId", "userId2", "userId3", ...]
+    confirmedUsers: [{ id: "userId", email: "user@email.com" } , ...]
+    areas: ["areaId", "areaId2", "areaId3", ...]
 
 PATCH: /teams/:id -> Update the team with the id
 DELETE: /teams/:id -> Delete the team with the id
