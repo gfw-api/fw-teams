@@ -62,11 +62,11 @@ spec:
             value: http://production-api.globalforestwatch.org
           - name: API_GATEWAY_EXTERNAL_URL
             value: http://production-api.globalforestwatch.org
-          - name: QUEUE_PROVIDER
+          - name: API_GATEWAY_QUEUE_PROVIDER
             value: redis
-          - name: QUEUE_NAME
-            value: mail_prod
-          - name: QUEUE_URL
+          - name: API_GATEWAY_QUEUE_NAME
+            value: mail_staging
+          - name: API_GATEWAY_QUEUE_URL
             valueFrom:
                 secretKeyRef:
                   name: dbsecrets
