@@ -7,9 +7,6 @@ var teamSerializer = new JSONAPISerializer('team', {
     attributes: [
         'name', 'managers', 'users', 'areas', 'layers', 'confirmedUsers', 'createdAt'
     ],
-    resource: {
-        attributes: ['type', 'content']
-    },
     keyForAttribute: 'camelCase'
 });
 
