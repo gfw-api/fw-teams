@@ -71,7 +71,10 @@ spec:
                   name: dbsecrets
                   key: REDIS_URI
           - name: JWT_SECRET
-            value: reallyunguessablesecretkey
+            valueFrom:
+                secretKeyRef:
+                  name: mssecrets
+                  key: FW_TEAMS_JWT_SECRET
           - name: APP_URL
             value: http://localhost:3000
 
