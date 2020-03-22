@@ -1,5 +1,7 @@
 # FW teams Microservice
 
+[![Build Status](https://travis-ci.org/gfw-api/fw-teams.svg?branch=develop)](https://travis-ci.org/gfw-api/fw-teams)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/67ef5c9f03336a7e5608/test_coverage)](https://codeclimate.com/github/gfw-api/fw-teams/test_coverage)
 
 This repository is the node skeleton microservice to create node microservice for WRI API
 
@@ -12,6 +14,7 @@ The FW teams microservice is built using [Node.js](https://nodejs.org/en/), and 
 Native execution requires:
 - [Node.js](https://nodejs.org/en/)
 - [MongoDB](https://www.mongodb.com/)
+- [Redis](https://redis.io/)
 
 Execution using Docker requires:
 - [Docker](https://www.docker.com/)
