@@ -1,22 +1,21 @@
 {
-    "mongodb": {
-        "host": "MONGO_PORT_27017_TCP_ADDR",
-        "port": "MONGO_PORT_27017_TCP_PORT"
-    },
-    "service": {
-        "port": "PORT"
-    },
-    "jwt": {
-        "token": "JWT_SECRET"
-    },
-    "apiGateway":{
-        "uri": "API_GATEWAY_URI",
-        "externalUrl": "API_GATEWAY_EXTERNAL_URL",
-        "queueUrl": "API_GATEWAY_QUEUE_URL",
-        "queueProvider": "API_GATEWAY_QUEUE_PROVIDER",
-        "queueName": "API_GATEWAY_QUEUE_NAME"
-    },
-    "application":{
-        "url": "APP_URL"
-    }
+  "mongodb": {
+    "host": "MONGO_PORT_27017_TCP_ADDR",
+    "port": "MONGO_PORT_27017_TCP_PORT"
+  },
+  "service": {
+    "port": "PORT"
+  },
+  "jwt": {
+    "token": "JWT_SECRET"
+  },
+  "apiGateway": {
+    "uri": "API_GATEWAY_URI",
+    "externalUrl": "API_GATEWAY_EXTERNAL_URL",
+    "queueUrl": "API_GATEWAY_QUEUE_URL",
+    "queueName": "API_GATEWAY_QUEUE_NAME"
+  },
+  "application": {
+    "url": "APP_URL"
+  }
 }

@@ -1,11 +1,11 @@
 {
-    "logger": {
-        "name": "fw-teams",
-        "level": "debug",
-        "toFile": false,
-        "dirLogFile": null
-    },
-    "mongodb": {
-        "database": "fw_teams_db_staging"
-    }
+  "logger": {
+    "name": "fw-teams",
+    "level": "debug",
+    "toFile": false,
+    "dirLogFile": null
+  },
+  "mongodb": {
+    "database": "fw_teams_db_staging"
+  }
 }

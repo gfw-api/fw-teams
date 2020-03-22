@@ -1,28 +1,40 @@
-develop:
-  extends:
-    file: base.yml
-    service: base
-  ports:
-    - "3035"
-  environment:
-    CT_REGISTER_MODE: auto
-    CT_URL: http://mymachine:9000
-    LOCAL_URL: http://mymachine:3035
-    CT_TOKEN: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Im1pY3Jvc2VydmljZSIsImNyZWF0ZWRBdCI6IjIwMTYtMDktMTQifQ.IRCIRm1nfIQTfda_Wb6Pg-341zhV8soAgzw7dd5HxxQ
-    JWT_SECRET: reallyunguessablesecretkey
-    API_VERSION: v1
-    API_GATEWAY_URL: http://mymachine:9000
-    API_GATEWAY_EXTERNAL_URL: http://mymachine:9000
-    API_GATEWAY_QUEUE_URL: redis://mymachine:6379
-    API_GATEWAY_QUEUE_PROVIDER: redis
-    API_GATEWAY_QUEUE_NAME: mail
-    APP_URL: http://localhost:3000
-  command: develop
-  volumes:
-    - ./app:/opt/fw-teams/app
-  links:
-    - mongo
-mongo:
-  extends:
-    file: base.yml
-    service: mongo
+version: "3"
+services:
+  develop:
+    build: .
+    container_name: fw-teams-develop
+    ports:
+        - "3035:3035"
+    environment:
+      PORT: 3035
+      NODE_PATH: app/src
+      CT_REGISTER_MODE: auto
+      CT_URL: http://mymachine:9000
+      LOCAL_URL: http://mymachine:3035
+      CT_TOKEN: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Im1pY3Jvc2VydmljZSIsImNyZWF0ZWRBdCI6IjIwMTYtMDktMTQifQ.IRCIRm1nfIQTfda_Wb6Pg-341zhV8soAgzw7dd5HxxQ
+      JWT_SECRET: reallyunguessablesecretkey
+      API_VERSION: v1
+      API_GATEWAY_URL: http://mymachine:9000
+      API_GATEWAY_EXTERNAL_URL: http://mymachine:9000
+      API_GATEWAY_QUEUE_URL: redis://mymachine:6379
+      API_GATEWAY_QUEUE_NAME: mail
+      APP_URL: http://localhost:3000
+    command: develop
+    volumes:
+      - ./app:/opt/fw-teams/app
+    links:
+      - mongo
+      - redis
+
+  mongo:
+    extends:
+      file: base.yml
+      service: mongo
+
+  redis:
+    image: bitnami/redis
+    ports:
+      - "6379"
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+

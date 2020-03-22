@@ -1,10 +1,36 @@
-test:
-  extends:
-    file: base.yml
-    service: base
-  container_name: fw-teams-test
-  environment:
-    NODE_ENV: test
-    CT_URL: http://mymachine:9000
-    API_VERSION: v1
-  command: test
+version: "3"
+services:
+  test:
+    build: .
+    ports:
+      - "3035:3035"
+    container_name: fw-teams-test
+    environment:
+      PORT: 3035
+      NODE_PATH: app/src
+      NODE_ENV: test
+      CT_URL: http://mymachine:9000
+      MONGO_PORT_27017_TCP_ADDR: mongo
+      API_VERSION: v1
+      CT_REGISTER_MODE: auto
+      API_GATEWAY_URL: http://mymachine:9000
+      API_GATEWAY_EXTERNAL_URL: http://mymachine:9000
+      API_GATEWAY_QUEUE_URL: redis://redis:6379
+      API_GATEWAY_QUEUE_NAME: mail
+    command: test
+    depends_on:
+      - mongo
+      - redis
+
+  mongo:
+    image: mongo:3.4
+    command: --smallfiles
+    ports:
+      - "27017"
+
+  redis:
+    image: bitnami/redis
+    ports:
+      - "6379"
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes

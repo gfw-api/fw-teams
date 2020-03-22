@@ -20,9 +20,11 @@ spec:
         imagePullPolicy: Always
         resources:
           requests:
-            memory: "128Mi"
+            cpu: "0.5"
+            memory: "256M"
           limits:
-            memory: "512Mi"
+            cpu: "1"
+            memory: "512M"
         args:
           - start
         env:
@@ -63,8 +65,6 @@ spec:
             value: http://production-api.globalforestwatch.org
           - name: API_GATEWAY_EXTERNAL_URL
             value: http://production-api.globalforestwatch.org
-          - name: API_GATEWAY_QUEUE_PROVIDER
-            value: redis
           - name: API_GATEWAY_QUEUE_NAME
             value: mail_prod
           - name: API_GATEWAY_QUEUE_URL
@@ -82,5 +82,22 @@ spec:
 
         ports:
           - containerPort: 3035
+        readinessProbe:
+          httpGet:
+            scheme: HTTP
+            path: /healthcheck
+            port: 3035
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+          periodSeconds: 15
+        livenessProbe:
+          httpGet:
+            scheme: HTTP
+            path: /healthcheck
+            port: 3035
+          failureThreshold: 3
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+          periodSeconds: 15
 
       restartPolicy: Always

@@ -4,9 +4,12 @@ const koaLogger = require('koa-logger');
 const config = require('config');
 const loader = require('loader');
 const mongoose = require('mongoose');
+const koaSimpleHealthCheck = require('koa-simple-healthcheck');
+
 mongoose.Promise = Promise;
 const ctRegisterMicroservice = require('ct-register-microservice-node');
 const ErrorSerializer = require('serializers/error.serializer');
+
 const mongoUri = process.env.MONGO_URI || `mongodb://${config.get('mongodb.host')}:${config.get('mongodb.port')}/${config.get('mongodb.database')}`;
 const validate = require('koa-validate');
 
@@ -39,11 +42,16 @@ app.use(async (ctx, next) => {
         try {
             error = JSON.parse(inErr);
         } catch (e) {
-            logger.error('Error parse');
+            logger.debug('Could not parse error message - is it JSON?: ', inErr);
             error = inErr;
         }
         ctx.status = error.status || ctx.status || 500;
-        logger.error(error);
+        if (ctx.status >= 500) {
+            logger.error(error);
+        } else {
+            logger.info(error);
+        }
+
         ctx.body = ErrorSerializer.serializeError(ctx.status, error.message);
         if (process.env.NODE_ENV === 'prod' && ctx.status === 500) {
             ctx.body = 'Unexpected error';
@@ -53,6 +61,7 @@ app.use(async (ctx, next) => {
 });
 
 app.use(koaLogger());
+app.use(koaSimpleHealthCheck());
 
 loader.loadRoutes(app);
 
@@ -69,7 +78,8 @@ const instance = app.listen(process.env.PORT, () => {
         url: process.env.LOCAL_URL,
         token: process.env.CT_TOKEN,
         active: true,
-    }).then(() => {}, (error) => {
+    }).then(() => {
+    }, (error) => {
         logger.error(error);
         process.exit(1);
     });

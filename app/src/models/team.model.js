@@ -1,6 +1,7 @@
-'use strict';
+
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+
+const { Schema } = mongoose;
 
 const Team = new Schema({
     name: { type: String, required: false, trim: true },
