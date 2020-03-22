@@ -3,10 +3,10 @@ kind: Service
 metadata:
   namespace: fw
   labels:
-    name: {name}
-  name: {name}
+    name: fw-teams
+  name: fw-teams
 spec:
   ports:
     - port: 3035
   selector:
-    name: {name}
+    name: fw-teams

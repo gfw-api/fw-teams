@@ -3,8 +3,8 @@ kind: Deployment
 metadata:
   namespace: fw
   labels:
-    name: {name}
-  name: {name}
+    name: fw-teams
+  name: fw-teams
 spec:
   revisionHistoryLimit: 0
   template:
@@ -12,11 +12,11 @@ spec:
       annotations:
         chaos.alpha.kubernetes.io/enabled: "true"
       labels:
-        name: {name}
+        name: fw-teams
     spec:
       containers:
-      - name: {name}
-        image: vizzuality/{name}
+      - name: fw-teams
+        image: vizzuality/fw-teams
         imagePullPolicy: Always
         resources:
           requests:
@@ -32,7 +32,7 @@ spec:
           - name: NODE_PATH
             value: app/src
           - name: LOCAL_URL
-            value: http://{name}.fw.svc.cluster.local:3035
+            value: http://fw-teams.fw.svc.cluster.local:3035
           - name: MONGO_URI
             valueFrom:
                 secretKeyRef:
