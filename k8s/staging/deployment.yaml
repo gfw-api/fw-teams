@@ -9,11 +9,18 @@ spec:
   revisionHistoryLimit: 0
   template:
     metadata:
-      annotations:
-        chaos.alpha.kubernetes.io/enabled: "true"
       labels:
         name: fw-teams
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: type
+                    operator: In
+                    values:
+                      - gfw
       containers:
       - name: fw-teams
         image: vizzuality/fw-teams
