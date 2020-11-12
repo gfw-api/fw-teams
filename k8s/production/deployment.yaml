@@ -1,12 +1,22 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: fw
   labels:
     name: fw-teams
   name: fw-teams
+  namespace: fw
 spec:
+  progressDeadlineSeconds: 2147483647
+  replicas: 1
   revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      name: fw-teams
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
   template:
     metadata:
       annotations:
@@ -24,89 +34,97 @@ spec:
                     values:
                       - gfw
       containers:
-      - name: fw-teams
-        image: vizzuality/fw-teams
-        imagePullPolicy: Always
-        resources:
-          requests:
-            cpu: "0.25"
-            memory: "256M"
-          limits:
-            cpu: "1"
-            memory: "512M"
-        args:
-          - start
-        env:
-          - name: PORT
-            value: "3035"
-          - name: NODE_ENV
-            value: prod
-          - name: NODE_PATH
-            value: app/src
-          - name: LOCAL_URL
-            value: http://fw-teams.fw.svc.cluster.local:3035
-          - name: MONGO_URI
-            valueFrom:
+        - args:
+            - start
+          env:
+            - name: PORT
+              value: "3035"
+            - name: NODE_ENV
+              value: prod
+            - name: NODE_PATH
+              value: app/src
+            - name: LOCAL_URL
+              value: http://fw-teams.fw.svc.cluster.local:3035
+            - name: MONGO_URI
+              valueFrom:
                 secretKeyRef:
-                  name: dbsecrets
                   key: TEAMS_MONGO_URI
-          - name: CT_URL
-            valueFrom:
-                secretKeyRef:
-                  name: mssecrets
-                  key: CT_URL
-          - name: CT_TOKEN
-            valueFrom:
-                secretKeyRef:
-                  name: mssecrets
-                  key: CT_TOKEN
-          - name: CT_REGISTER_MODE
-            valueFrom:
-                secretKeyRef:
-                  name: mssecrets
-                  key: CT_REGISTER_MODE
-          - name: API_VERSION
-            valueFrom:
-                secretKeyRef:
-                  name: mssecrets
-                  key: API_VERSION
-          - name: API_GATEWAY_URL
-            value: http://production-api.globalforestwatch.org
-          - name: API_GATEWAY_EXTERNAL_URL
-            value: http://production-api.globalforestwatch.org
-          - name: API_GATEWAY_QUEUE_NAME
-            value: mail_prod
-          - name: API_GATEWAY_QUEUE_URL
-            valueFrom:
-                secretKeyRef:
                   name: dbsecrets
-                  key: REDIS_URI
-          - name: JWT_SECRET
-            valueFrom:
+            - name: CT_URL
+              valueFrom:
                 secretKeyRef:
+                  key: CT_URL
                   name: mssecrets
+            - name: CT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: CT_TOKEN
+                  name: mssecrets
+            - name: CT_REGISTER_MODE
+              valueFrom:
+                secretKeyRef:
+                  key: CT_REGISTER_MODE
+                  name: mssecrets
+            - name: API_VERSION
+              valueFrom:
+                secretKeyRef:
+                  key: API_VERSION
+                  name: mssecrets
+            - name: API_GATEWAY_URL
+              value: http://production-api.globalforestwatch.org
+            - name: API_GATEWAY_EXTERNAL_URL
+              value: http://production-api.globalforestwatch.org
+            - name: API_GATEWAY_QUEUE_NAME
+              value: mail_prod
+            - name: API_GATEWAY_QUEUE_URL
+              valueFrom:
+                secretKeyRef:
+                  key: REDIS_URI
+                  name: dbsecrets
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
                   key: FW_TEAMS_JWT_SECRET
-          - name: APP_URL
-            value: https://forest-watcher.herokuapp.com
-
-        ports:
-          - containerPort: 3035
-        readinessProbe:
-          httpGet:
-            scheme: HTTP
-            path: /healthcheck
-            port: 3035
-          initialDelaySeconds: 30
-          timeoutSeconds: 5
-          periodSeconds: 15
-        livenessProbe:
-          httpGet:
-            scheme: HTTP
-            path: /healthcheck
-            port: 3035
-          failureThreshold: 3
-          initialDelaySeconds: 30
-          timeoutSeconds: 5
-          periodSeconds: 15
-
+                  name: mssecrets
+            - name: APP_URL
+              value: https://forest-watcher.herokuapp.com
+          image: vizzuality/fw-teams
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthcheck
+              port: 3035
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 15
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: fw-teams
+          ports:
+            - containerPort: 3035
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthcheck
+              port: 3035
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 15
+            successThreshold: 1
+            timeoutSeconds: 5
+          resources:
+            limits:
+              cpu: "1"
+              memory: 512M
+            requests:
+              cpu: 250m
+              memory: 256M
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
       restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
