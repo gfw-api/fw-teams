@@ -1828,7 +1828,7 @@ fast-levenshtein@~2.0.6:
   resolved "https://registry.yarnpkg.com/fast-levenshtein/-/fast-levenshtein-2.0.6.tgz#3d8a5c66883a16a30ca8643e851f19baa7797917"
   integrity sha1-PYpcZog6FqMMqGQ+hR8Zuqd5eRc=
 
-"fastly-promises@github:tiagojsag/fastly-promises#master":
+fastly-promises@tiagojsag/fastly-promises#master:
   version "0.0.0-semantically-released"
   resolved "https://codeload.github.com/tiagojsag/fastly-promises/tar.gz/14470364f0d4e62b8ff99c8f7e7dd7cb27039242"
   dependencies:

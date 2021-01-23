@@ -10,6 +10,7 @@ services:
       NODE_PATH: app/src
       NODE_ENV: test
       CT_URL: http://mymachine:9000
+      LOCAL_URL: http://mymachine:3035
       MONGO_PORT_27017_TCP_ADDR: mongo
       API_VERSION: v1
       CT_REGISTER_MODE: auto
