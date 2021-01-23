@@ -11,6 +11,7 @@ services:
       NODE_ENV: test
       CT_URL: http://mymachine:9000
       LOCAL_URL: http://mymachine:3035
+      CT_TOKEN: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Im1pY3Jvc2VydmljZSIsImNyZWF0ZWRBdCI6IjIwMTYtMDktMTQifQ.IRCIRm1nfIQTfda_Wb6Pg-341zhV8soAgzw7dd5HxxQ
       MONGO_PORT_27017_TCP_ADDR: mongo
       API_VERSION: v1
       CT_REGISTER_MODE: auto
