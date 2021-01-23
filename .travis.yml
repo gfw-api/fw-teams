@@ -22,6 +22,7 @@ env:
     - API_GATEWAY_EXTERNAL_URL=http://127.0.0.1:9000
     - API_GATEWAY_QUEUE_URL=redis://127.0.0.1:6379
     - API_GATEWAY_QUEUE_NAME=mail
+    - FASTLY_ENABLED=false
 
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter

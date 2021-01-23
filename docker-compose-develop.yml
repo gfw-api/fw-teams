@@ -19,6 +19,7 @@ services:
       API_GATEWAY_QUEUE_URL: redis://mymachine:6379
       API_GATEWAY_QUEUE_NAME: mail
       APP_URL: http://localhost:3000
+      FASTLY_ENABLED: "false"
     command: develop
     volumes:
       - ./app:/opt/fw-teams/app
