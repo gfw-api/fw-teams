@@ -132,8 +132,7 @@ class TeamRouter {
 
 }
 
-
-const isAuthenticated = async (ctx, next) => {
+const isAuthenticatedMiddleware = async (ctx, next) => {
     logger.info(`Verifying if user is authenticated`);
     const { query, body } = ctx.request;
 
@@ -146,11 +145,11 @@ const isAuthenticated = async (ctx, next) => {
     await next();
 };
 
-router.get('/:id', isAuthenticated, TeamRouter.getById);
-router.get('/user/:userId', isAuthenticated, TeamRouter.getByUserId);
-router.post('/', isAuthenticated, TeamValidator.create, TeamRouter.create);
-router.patch('/:id', isAuthenticated, TeamValidator.update, TeamRouter.update);
-router.delete('/:id', isAuthenticated, TeamRouter.delete);
-router.get('/confirm/:token', isAuthenticated, TeamRouter.confirmUser);
+router.get('/:id', isAuthenticatedMiddleware, TeamRouter.getById);
+router.get('/user/:userId', isAuthenticatedMiddleware, TeamRouter.getByUserId);
+router.post('/', isAuthenticatedMiddleware, TeamValidator.create, TeamRouter.create);
+router.patch('/:id', isAuthenticatedMiddleware, TeamValidator.update, TeamRouter.update);
+router.delete('/:id', isAuthenticatedMiddleware, TeamRouter.delete);
+router.get('/confirm/:token', isAuthenticatedMiddleware, TeamRouter.confirmUser);
 
 module.exports = router;
