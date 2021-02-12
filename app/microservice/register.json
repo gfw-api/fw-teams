@@ -4,7 +4,6 @@
 	"endpoints": [
 		{
 			"path": "/v1/teams/:id",
-			"authenticated": true,
 			"method": "GET",
 			"redirect": {
 				"method": "GET",
@@ -13,7 +12,6 @@
 		},{
 			"path": "/v1/teams/user/:userId",
 			"method": "GET",
-			"authenticated": true,
 			"redirect": {
 				"method": "GET",
 				"path": "/api/v1/teams/user/:userId"
@@ -21,7 +19,6 @@
 		},{
 			"path": "/v1/teams",
 			"method": "POST",
-			"authenticated": true,
 			"redirect": {
 				"method": "POST",
 				"path": "/api/v1/teams"
@@ -29,7 +26,6 @@
 		},{
 			"path": "/v1/teams/:id",
 			"method": "PATCH",
-			"authenticated": true,
 			"redirect": {
 				"method": "PATCH",
 				"path": "/api/v1/teams/:id"
@@ -37,7 +33,6 @@
 		},{
 			"path": "/v1/teams/:id",
 			"method": "DELETE",
-			"authenticated": true,
 			"redirect": {
 				"method": "DELETE",
 				"path": "/api/v1/teams/:id"
@@ -45,7 +40,6 @@
 		},{
 			"path": "/v1/teams/confirm/:token",
 			"method": "GET",
-			"authenticated": true,
 			"redirect": {
 				"method": "GET",
 				"path": "/api/v1/teams/confirm/:token"

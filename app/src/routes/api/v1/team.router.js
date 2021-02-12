@@ -132,11 +132,25 @@ class TeamRouter {
 
 }
 
-router.get('/:id', TeamRouter.getById);
-router.get('/user/:userId', TeamRouter.getByUserId);
-router.post('/', TeamValidator.create, TeamRouter.create);
-router.patch('/:id', TeamValidator.update, TeamRouter.update);
-router.delete('/:id', TeamRouter.delete);
-router.get('/confirm/:token', TeamRouter.confirmUser);
+
+const isAuthenticated = async (ctx, next) => {
+    logger.info(`Verifying if user is authenticated`);
+    const { query, body } = ctx.request;
+
+    const user = { ...(query.loggedUser ? JSON.parse(query.loggedUser) : {}), ...body.loggedUser };
+
+    if (!user || !user.id) {
+        ctx.throw(401, 'Unauthorized');
+        return;
+    }
+    await next();
+};
+
+router.get('/:id', isAuthenticated, TeamRouter.getById);
+router.get('/user/:userId', isAuthenticated, TeamRouter.getByUserId);
+router.post('/', isAuthenticated, TeamValidator.create, TeamRouter.create);
+router.patch('/:id', isAuthenticated, TeamValidator.update, TeamRouter.update);
+router.delete('/:id', isAuthenticated, TeamRouter.delete);
+router.get('/confirm/:token', isAuthenticated, TeamRouter.confirmUser);
 
 module.exports = router;
