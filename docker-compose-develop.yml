@@ -11,6 +11,8 @@ services:
       CT_REGISTER_MODE: auto
       CT_URL: http://mymachine:9000
       LOCAL_URL: http://mymachine:3035
+      MONGO_PORT_27017_TCP_ADDR: mongo
+      REDIS_PORT_6379_TCP_ADDR: redis
       CT_TOKEN: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Im1pY3Jvc2VydmljZSIsImNyZWF0ZWRBdCI6IjIwMTYtMDktMTQifQ.IRCIRm1nfIQTfda_Wb6Pg-341zhV8soAgzw7dd5HxxQ
       JWT_SECRET: reallyunguessablesecretkey
       API_VERSION: v1
@@ -18,24 +20,28 @@ services:
       API_GATEWAY_EXTERNAL_URL: http://mymachine:9000
       API_GATEWAY_QUEUE_URL: redis://mymachine:6379
       API_GATEWAY_QUEUE_NAME: mail
-      APP_URL: http://localhost:3000
+      APP_URL: http://mymachine:3035
       FASTLY_ENABLED: "false"
     command: develop
     volumes:
       - ./app:/opt/fw-teams/app
-    links:
+    depends_on:
       - mongo
       - redis
 
   mongo:
-    extends:
-      file: base.yml
-      service: mongo
+    image: mongo:3.4
+    container_name: fw-teams-mongo-develop
+    ports:
+      - "27022:27017"
+    volumes:
+      - $HOME/docker/data/fw-teams/mongodb:/data/db
+    restart: always
 
   redis:
     image: bitnami/redis
     ports:
-      - "6379"
+      - "6379:6379"
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
 
