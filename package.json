@@ -55,7 +55,7 @@
     "koa-router": "^7.0.1",
     "koa-simple-healthcheck": "^0.0.1",
     "koa-validate": "^1.0.7",
-    "mongoose": "^4.11.0",
+    "mongoose": "^5.7.5",
     "request": "^2.79.0",
     "request-promise": "^4.1.1",
     "vizz.async-client": "^1.0.0"
